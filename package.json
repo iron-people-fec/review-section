@@ -9,7 +9,8 @@
   },
   "scripts": {
     "build": "npx webpack -w",
-    "start": "nodemon server"
+    "start": "nodemon server",
+    "seed-db": "node ./database/seeder.js"
   },
   "dependencies": {
     "axios": "^0.21.1",
@@ -20,7 +21,8 @@
     "random-username-generator": "^1.0.4",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
-    "sequelize": "^6.3.5"
+    "sequelize": "^6.3.5",
+    "unique-names-generator": "^4.3.1"
   },
   "devDependencies": {
     "@babel/core": "^7.12.10",

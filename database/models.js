@@ -34,8 +34,12 @@ var Review = db.define('Review', {
   quality_rating: {
     type: DataTypes.INTEGER,
     allowNull: false
+  },
+  quality_rating: {
+    type: DataTypes.INTEGER,
+    allowNull: false
   }
-})
+}, { timestamps: false });
 
 
 var Photo = db.define('Photo', {
@@ -43,9 +47,9 @@ var Photo = db.define('Photo', {
     type: DataTypes.STRING,
     allowNull: false
   }
-});
+}, { timestamps: false });
 
-Review.belongsTo(Photo, { as: 'review' });
+Photo.belongsTo(Review, { as: 'review' });
 
 module.exports = {
   Review: Review,

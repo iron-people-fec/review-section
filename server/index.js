@@ -20,6 +20,14 @@ app.get('/', (req, res) => {
   res.render()
 })
 
+app.get('/products/:product_id/reviews', (req, res) => {
+  Review.findAll({
+    where: {
+      product_id: req.params.product_id
+    }
+  }).then(data => res.send(data));
+})
+
 db.sync().then(() => {
   app.listen(port, () => {
     console.log(`Now listening on port ${port}`)
