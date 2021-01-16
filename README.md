@@ -4,10 +4,9 @@
 
 ## Related Projects
 
-  - https://github.com/teamName/repo
-  - https://github.com/teamName/repo
-  - https://github.com/teamName/repo
-  - https://github.com/teamName/repo
+  - https://github.com/iron-people-fec/similar-items
+  - https://github.com/iron-people-fec/product_images
+  - https://github.com/iron-people-fec/general-sales
 
 ## Table of Contents
 

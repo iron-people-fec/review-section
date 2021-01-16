@@ -2,16 +2,36 @@
   "name": "",
   "version": "",
   "description": "",
-  "author": "",
+  "author": "Lexy Kramer",
   "license": "",
   "engines": {
     "node": ">=6.13.0"
   },
   "scripts": {
+    "build": "npx webpack -w",
+    "start": "nodemon server",
+    "seed-db": "node ./database/seeder.js"
   },
   "dependencies": {
+    "axios": "^0.21.1",
+    "express": "^4.17.1",
+    "faker": "^5.1.0",
+    "lorem-ipsum": "^2.0.3",
+    "mysql2": "^2.2.5",
+    "random-username-generator": "^1.0.4",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1",
+    "sequelize": "^6.3.5",
+    "unique-names-generator": "^4.3.1"
   },
   "devDependencies": {
-    "eslint-config-hackreactor": "git://github.com/reactorcore/eslint-config-hackreactor"
+    "@babel/core": "^7.12.10",
+    "@babel/preset-env": "^7.12.11",
+    "@babel/preset-react": "^7.12.10",
+    "babel-loader": "^8.2.2",
+    "eslint-config-hackreactor": "git://github.com/reactorcore/eslint-config-hackreactor",
+    "nodemon": "^2.0.7",
+    "webpack": "^5.14.0",
+    "webpack-cli": "^4.3.1"
   }
 }
