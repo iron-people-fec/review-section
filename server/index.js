@@ -16,9 +16,6 @@ const Photo = require('../database/models.js').Photo
 app.use(express.json());
 app.use(express.static(path.join(__dirname, '../public')));
 
-app.get('/', (req, res) => {
-  res.render()
-})
 
 app.get('/products/:product_id/reviews', (req, res) => {
   Review.findAll({

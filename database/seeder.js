@@ -3,7 +3,6 @@ const db = require('./index.js');
 const Review = require('../database/models.js').Review
 const Photo = require('../database/models.js').Photo
 
-const LoremIpsum = require('lorem-ipsum').LoremIpsum;
 const { uniqueNamesGenerator, adjectives, colors, animals, names } = require('unique-names-generator');
 const faker = require('faker');
 

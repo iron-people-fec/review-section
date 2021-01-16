@@ -12,20 +12,27 @@ class App extends React.Component {
 
   handleGetReviews() {
     axios.get('/products/1/reviews')
-    .then((response) => {
-      this.setState({
-        reviews: response.data
+      .then((response) => {
+        this.setState({
+          reviews: response.data
+        });
       });
-    })
   }
 
   componentDidMount() {
-    this.handleGetReviews()
+    this.handleGetReviews();
   }
 
   render() {
+    const reviews = [];
+    for (let i = 0; i < this.state.reviews.length; i++) {
+      reviews.push(<li><strong>{this.state.reviews[i].username}:</strong> {this.state.reviews[i].title}</li>)
+    }
     return (
-      <h1>yep</h1>
+      <div>
+        <h1>Reviews:</h1>
+        <ul>{reviews}</ul>
+      </div>
     )
   }
 }
@@ -33,4 +40,4 @@ class App extends React.Component {
 
 
 
-ReactDOM.render(<App/>, document.getElementById('root'));
+ReactDOM.render(<App />, document.getElementById('root'));
