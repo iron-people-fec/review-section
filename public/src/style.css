@@ -1,0 +1,85 @@
+body {
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: 15px;
+}
+
+.review {
+  /* background-color: purple; */
+  list-style: none;
+  padding: 20px;
+  margin: 14px 0;
+  border: rgb(214, 214, 214) solid 1px;
+  border-radius: 4px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.main {
+  width: 64%;
+}
+
+.side {
+  width: 34%;
+}
+
+h3 {
+  font-size: 19px;
+  margin-top: 0;
+}
+
+.verified {
+  color: rgb(0, 102, 1);
+}
+
+
+span .post-details {
+  font-size: 12px;
+  background-color: red;
+}
+
+ul {
+  padding-inline-start: 0;
+}
+
+.recommend {
+  display: inline-block;
+  border-left: gray solid 1px;
+  padding: 0 10px;
+  margin: 0 10px;
+}
+
+.post-details {
+  font-size: 12px;
+}
+
+.helpful-section {
+  display: flex;
+}
+
+.helpful-buttons button{
+  display: inline-block;
+  padding: 5px 20px;
+  border:gray solid 1px;
+  border-radius: 4px;
+  font-size: 12px;
+  background-color: white;
+}
+
+.helpful-buttons button:hover {
+  background-color: rgb(240, 240, 240);
+  border-color: black;
+}
+
+.helpful-form {
+  display: flex;
+  justify-content: space-between;
+}
+
+.report-link {
+  text-decoration: underline;
+  color: #666666;
+}
+
+.report-link:hover {
+  color: black;
+}
