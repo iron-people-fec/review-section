@@ -38,9 +38,18 @@ var Review = db.define('Review', {
   quality_rating: {
     type: DataTypes.INTEGER,
     allowNull: false
-  }
-}, { timestamps: false });
+  },
+  would_recommend: {
+    type: DataTypes.BOOLEAN,
+    allowNull: false
+  },
+  verified_purchaser: {
+    type: DataTypes.BOOLEAN,
+    allowNull: false
+  },
 
+});
+// , { timestamps: false }
 
 var Photo = db.define('Photo', {
   url: {

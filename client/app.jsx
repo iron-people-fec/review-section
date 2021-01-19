@@ -1,6 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import axios from 'axios';
+import Reviews from './Reviews.jsx';
+import '../public/src/style.css';
 
 class App extends React.Component {
   constructor(props) {
@@ -24,20 +26,14 @@ class App extends React.Component {
   }
 
   render() {
-    const reviews = [];
-    for (let i = 0; i < this.state.reviews.length; i++) {
-      reviews.push(<li><strong>{this.state.reviews[i].username}:</strong> {this.state.reviews[i].title}</li>)
-    }
     return (
       <div>
         <h1>Reviews:</h1>
-        <ul>{reviews}</ul>
+        <ul><Reviews reviews={this.state.reviews}/></ul>
       </div>
     )
   }
 }
-
-
 
 
 ReactDOM.render(<App />, document.getElementById('root'));
