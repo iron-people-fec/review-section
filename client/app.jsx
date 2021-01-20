@@ -10,21 +10,41 @@ class App extends React.Component {
     super(props);
     this.state = {
       reviews: [],
-      displayNum: 8
+      displayedReviews: [],
+      displayNum: 0
     }
   }
 
   handleGetReviews() {
     axios.get('/products/1/reviews')
       .then((response) => {
+        var someData = response.data.slice(0, 8)
+        var num = response.data.length - 8;
         this.setState({
-          reviews: response.data
+          reviews: response.data,
+          displayedReviews: someData,
+          hiddenNum: num
         });
       });
   }
 
   componentDidMount() {
     this.handleGetReviews();
+  }
+
+  handleLoadMore() {
+    if (this.state.hiddenNum < 8) {
+      var data = this.state.reviews;
+      var display = 0;
+    } else {
+      var display = this.state.hiddenNum - 8;
+      var data = this.state.reviews.slice(0, display);
+    }
+
+    this.setState({
+      hiddenNum: display,
+      displayedReviews: data
+    });
   }
 
 
@@ -35,9 +55,10 @@ class App extends React.Component {
         <Filters/>
         <span>We found {this.state.reviews.length} matching reviews</span>
         <List>
-          <Reviews reviews={this.state.reviews.slice(0, this.state.displayNum)} />
+          <Reviews reviews={this.state.displayedReviews} />
         </List>
-        <Button>load {this.state.reviews.length - this.state.displayNum} more</Button>
+        <Button onClick={this.handleLoadMore.bind(this)} style={{ display: this.state.hiddenNum <= 0 ? "none" : "block" }}>load {this.state.hiddenNum} more</Button>
+        <ReviewButton>Write a review</ReviewButton>
       </Container>
     )
   }
@@ -57,14 +78,14 @@ const List = styled.ul`
 
 const Button = styled.button`
   display: block;
-  width: 120px;
-  padding: 8px 0;
+  padding: 8px 15px;
   border:#888888 solid 1px;
   border-radius: 4px;
   font-size: 12px;
   background-color: white;
   color: #333333;
-  margin: 0 auto;
+  margin: 2em auto;
+  transition: all 200ms ease-out 0s;
 
   &:hover {
     background-color: rgb(240, 240, 240);
@@ -77,5 +98,29 @@ const Button = styled.button`
     outline-offset: 2px;
   }
 `
+
+const ReviewButton = styled.button`
+display: block;
+padding: 8px 15px;
+border-radius: 4px;
+font-size: 12px;
+background-color: #CC0000;
+color: white;
+margin: 2em auto;
+border: none;
+transition: all 200ms ease-out 0s;
+
+&:hover {
+  background-color: rgb(170, 0, 0);
+  border-color: black;
+  cursor: pointer;
+}
+
+&:focus {
+  outline: gray 1px dashed;
+  outline-offset: 2px;
+}
+`
+
 
 ReactDOM.render(<App />, document.getElementById('root'));
