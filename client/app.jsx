@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import axios from 'axios';
 import Reviews from './review-list/Reviews.jsx';
-import Filters from './Filters.jsx';
+import Filters from './filters/Filters.jsx';
 import styled from 'styled-components'
 
 class App extends React.Component {
@@ -11,7 +11,11 @@ class App extends React.Component {
     this.state = {
       reviews: [],
       displayedReviews: [],
-      displayNum: 0
+      hiddenNum: 0,
+      checkBoxes: [
+        {id: 0, value: "with photos", isChecked: false},
+        {id: 1, value: "verified purchases", isChecked: false}
+      ]
     }
   }
 
@@ -26,10 +30,6 @@ class App extends React.Component {
           hiddenNum: num
         });
       });
-  }
-
-  componentDidMount() {
-    this.handleGetReviews();
   }
 
   handleLoadMore() {
@@ -47,12 +47,19 @@ class App extends React.Component {
     });
   }
 
+  handleCheckedBox() {
+    // this.state.checkBoxes
+    console.log(event.target.value)
+  }
 
+  componentDidMount() {
+    this.handleGetReviews();
+  }
 
   render() {
     return (
       <Container >
-        <Filters/>
+        <Filters checkBoxes={this.state.checkBoxes} handleCheckedBox={this.handleCheckedBox.bind(this)}/>
         <span>We found {this.state.reviews.length} matching reviews</span>
         <List>
           <Reviews reviews={this.state.displayedReviews} />
