@@ -25,6 +25,14 @@ app.get('/products/:product_id/reviews', (req, res) => {
   }).then(data => res.send(data));
 })
 
+app.get('/products/:review_id/images', (req, res) => {
+  Photo.findAll({
+    where: {
+      reviewId: req.params.review_id
+    }
+  }).then(data => res.send(data));
+})
+
 db.sync().then(() => {
   app.listen(port, () => {
     console.log(`Now listening on port ${port}`)
