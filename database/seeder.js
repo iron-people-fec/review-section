@@ -2,6 +2,7 @@ const Sequelize = require('sequelize');
 const db = require('./index.js');
 const Review = require('../database/models.js').Review
 const Photo = require('../database/models.js').Photo
+const titles = require('./fake_data/titles.js');
 
 const { uniqueNamesGenerator, adjectives, colors, animals, names } = require('unique-names-generator');
 const faker = require('faker');
@@ -41,10 +42,10 @@ const review = function (i, trend) {
   let overall = (quality + value) / 2
   recommend = overall > 70 ? true : false;
   return {
-    title: faker.lorem.sentence().slice(0, -1),
-    body: body().slice(0, 254),
+    title: titles(),
+    body: faker.commerce.productDescription().slice(0, 254),
     helpful_count: helpCnt(),
-    username: username(),
+    username: faker.name.firstName(),
     product_id: i,
     overall_rating: overall,
     value_rating: value,
