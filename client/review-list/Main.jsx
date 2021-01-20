@@ -4,7 +4,7 @@ import PercentageCircle from './PercentageCircle.jsx';
 import styled from 'styled-components';
 import moment from 'moment';
 
-const Main = ({review, images}) => {
+const Main = ({ review, photosAdded}) => {
   return (
     <OuterContainer>
       <Title>{review.title}</Title>
@@ -22,7 +22,7 @@ const Main = ({review, images}) => {
       </PostDetails>
       {review.body}
       <Gallery>
-        {images.map((image, i) => (<img src={image.url} style={{ width: "100px", "padding-right": "1em" }} />))}
+        {review.images.map((url, i) => <img src={url} style={{ width: "100px", paddingRight: "1em" }} key={i}/>)}
       </Gallery>
     </OuterContainer>
   );

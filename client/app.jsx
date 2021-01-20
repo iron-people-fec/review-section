@@ -15,42 +15,68 @@ class App extends React.Component {
       checkBoxes: [
         {id: 0, value: "with photos", isChecked: false},
         {id: 1, value: "verified purchases", isChecked: false}
-      ]
+      ],
+      reviewsWithPhotos: [],
+      photosAdded: false
     }
   }
 
   handleGetReviews() {
     axios.get('/products/1/reviews')
       .then((response) => {
-        var someData = response.data.slice(0, 8)
-        var num = response.data.length - 8;
+        const responseReviews = [...response.data]
+        for (let review of responseReviews) {
+          review.images = []
+        }
+        console.log(responseReviews)
+        var someData = responseReviews.slice(0, 8)
+        var num = responseReviews.length - 8;
         this.setState({
-          reviews: response.data,
+          reviews: responseReviews,
           displayedReviews: someData,
           hiddenNum: num
         });
       });
   }
 
-  handleLoadMore() {
-    if (this.state.hiddenNum < 8) {
-      var data = this.state.reviews;
-      var display = 0;
-    } else {
-      var display = this.state.hiddenNum - 8;
-      var data = this.state.reviews.slice(0, display);
-    }
 
+  handleCheckedBox() {
+    const newCheckboxes = [...this.state.checkBoxes]
+    var clickedObjVal;
+    for (var obj of newCheckboxes) {
+        if (obj.value === event.target.value) {
+          obj.isChecked = obj.isChecked ? false : true;
+          clickedObjVal = obj.value;
+          }
+    }
     this.setState({
-      hiddenNum: display,
-      displayedReviews: data
+      checkBoxes: newCheckboxes,
+      photosAdded: true
+    });
+
+    // this.handleFilter(clickedObjVal)
+  }
+
+  addPhotos(id) {
+    axios.get(`/products/${id}/images`)
+    .then((response) => {
+        if (response.data.length !== 0) {
+          var reviewsEdited = [...this.state.reviews]
+          for (var review of reviewsEdited) {
+            if (review.id === id) {
+              review.images = response.data.map((img) => (
+                img.url
+              ));
+            }
+          }
+          console.log(reviewsEdited)
+          this.setState({
+            reviews: reviewsEdited
+          });
+        }
     });
   }
 
-  handleCheckedBox() {
-    // this.state.checkBoxes
-    console.log(event.target.value)
-  }
 
   componentDidMount() {
     this.handleGetReviews();
@@ -59,12 +85,12 @@ class App extends React.Component {
   render() {
     return (
       <Container >
-        <Filters checkBoxes={this.state.checkBoxes} handleCheckedBox={this.handleCheckedBox.bind(this)}/>
+        {/* <Filters checkBoxes={this.state.checkBoxes} handleCheckedBox={this.handleCheckedBox.bind(this)}/> */}
         <span>We found {this.state.reviews.length} matching reviews</span>
         <List>
-          <Reviews reviews={this.state.displayedReviews} />
+          <Reviews reviews={this.state.displayedReviews} addPhotos={this.addPhotos.bind(this)} photosAdded={this.state.photosAdded}/>
         </List>
-        <Button onClick={this.handleLoadMore.bind(this)} style={{ display: this.state.hiddenNum <= 0 ? "none" : "block" }}>load {this.state.hiddenNum} more</Button>
+        {/* <Button onClick={this.handleLoadMore.bind(this)} style={{ display: this.state.hiddenNum <= 0 ? "none" : "block" }}>load {this.state.hiddenNum} more</Button> */}
         <ReviewButton>Write a review</ReviewButton>
       </Container>
     )
