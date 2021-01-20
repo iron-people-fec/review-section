@@ -37,7 +37,7 @@ class App extends React.Component {
         <List>
           <Reviews reviews={this.state.reviews.slice(0, this.state.displayNum)} />
         </List>
-        <button>load {this.state.reviews.length - this.state.displayNum} more</button>
+        <Button>load {this.state.reviews.length - this.state.displayNum} more</Button>
       </Container>
     )
   }
@@ -53,6 +53,29 @@ const Container = styled.div`
 
 const List = styled.ul`
   padding-inline-start: 0;
+`
+
+const Button = styled.button`
+  display: block;
+  width: 120px;
+  padding: 8px 0;
+  border:#888888 solid 1px;
+  border-radius: 4px;
+  font-size: 12px;
+  background-color: white;
+  color: #333333;
+  margin: 0 auto;
+
+  &:hover {
+    background-color: rgb(240, 240, 240);
+    border-color: black;
+    cursor: pointer;
+  }
+
+  &:focus {
+    outline: gray 1px dashed;
+    outline-offset: 2px;
+  }
 `
 
 ReactDOM.render(<App />, document.getElementById('root'));
