@@ -9,7 +9,8 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      reviews: []
+      reviews: [],
+      displayNum: 8
     }
   }
 
@@ -26,14 +27,17 @@ class App extends React.Component {
     this.handleGetReviews();
   }
 
+
+
   render() {
     return (
       <Container >
         <Filters/>
         <span>We found {this.state.reviews.length} matching reviews</span>
         <List>
-          <Reviews reviews={this.state.reviews} />
+          <Reviews reviews={this.state.reviews.slice(0, this.state.displayNum)} />
         </List>
+        <button>load {this.state.reviews.length - this.state.displayNum} more</button>
       </Container>
     )
   }
