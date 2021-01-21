@@ -14,18 +14,12 @@ class Review extends React.Component {
 
   componentDidMount() {
     this.props.addPhotos(this.props.review.id)
-      // if (review.images) {
-      //   var images = review.images.map((image, i) => (<img src={image.url} style={{ width: "100px", "padding-right": "1em" }} />))
-      // }
-
   }
 
   render() {
     return (
       < ReviewContainer >
         <Main review={this.props.review} photosAdded={this.props.photosAdded}/>
-        {/* images={this.state.images} */}
-
       <Aside review={this.props.review} />
     </ReviewContainer>
     )

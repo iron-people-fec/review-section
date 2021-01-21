@@ -10,8 +10,8 @@ function Filters({checkBoxes, handleCheckedBox}) {
       <Dropdown>filter by <strong>all ratings</strong></Dropdown>
       </div>
       <ul>
-      {checkBoxes.map((checkbox) => (
-        <Checkbox checkbox={checkbox} handleCheckedBox={handleCheckedBox}/>
+      {checkBoxes.map((checkbox, i) => (
+        <Checkbox checkbox={checkbox} handleCheckedBox={handleCheckedBox} key={i}/>
       ))}
       </ul>
     </Container>

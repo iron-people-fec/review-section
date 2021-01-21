@@ -28,7 +28,6 @@ class App extends React.Component {
         for (let review of responseReviews) {
           review.images = []
         }
-        console.log(responseReviews)
         var someData = responseReviews.slice(0, 8)
         var num = responseReviews.length - 8;
         this.setState({
@@ -69,11 +68,25 @@ class App extends React.Component {
               ));
             }
           }
-          console.log(reviewsEdited)
           this.setState({
             reviews: reviewsEdited
           });
         }
+    });
+  }
+
+    handleLoadMore() {
+    if (this.state.hiddenNum < 8) {
+      var data = this.state.reviews;
+      var display = 0;
+    } else {
+      var display = this.state.hiddenNum - 8;
+      var data = this.state.reviews.slice(0, display);
+    }
+
+    this.setState({
+      hiddenNum: display,
+      displayedReviews: data
     });
   }
 
@@ -85,12 +98,12 @@ class App extends React.Component {
   render() {
     return (
       <Container >
-        {/* <Filters checkBoxes={this.state.checkBoxes} handleCheckedBox={this.handleCheckedBox.bind(this)}/> */}
+        <Filters checkBoxes={this.state.checkBoxes} handleCheckedBox={this.handleCheckedBox.bind(this)}/>
         <span>We found {this.state.reviews.length} matching reviews</span>
         <List>
           <Reviews reviews={this.state.displayedReviews} addPhotos={this.addPhotos.bind(this)} photosAdded={this.state.photosAdded}/>
         </List>
-        {/* <Button onClick={this.handleLoadMore.bind(this)} style={{ display: this.state.hiddenNum <= 0 ? "none" : "block" }}>load {this.state.hiddenNum} more</Button> */}
+        <Button onClick={this.handleLoadMore.bind(this)} style={{ display: this.state.hiddenNum <= 0 ? "none" : "block" }}>load {this.state.hiddenNum} more</Button>
         <ReviewButton>Write a review</ReviewButton>
       </Container>
     )
