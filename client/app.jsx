@@ -4,7 +4,63 @@ import axios from 'axios';
 import Reviews from './review-list/Reviews.jsx';
 import Filters from './filters/Filters.jsx';
 import Gallery from './Gallery.jsx';
+import OverallRatings from './overall-ratings/OverallRatings.jsx';
 import styled from 'styled-components'
+
+
+const Container = styled.div`
+  margin: 0 1.5em;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: 15px;
+`
+const List = styled.ul`
+  padding-inline-start: 0;
+`
+const Button = styled.button`
+  display: block;
+  padding: 8px 15px;
+  border:#888888 solid 1px;
+  border-radius: 4px;
+  font-size: 12px;
+  background-color: white;
+  color: #333333;
+  margin: 2em auto;
+  transition: all 200ms ease-out 0s;
+
+  &:hover {
+    background-color: rgb(240, 240, 240);
+    border-color: black;
+    cursor: pointer;
+  }
+
+  &:focus {
+    outline: gray 1px dashed;
+    outline-offset: 2px;
+  }
+`
+const ReviewButton = styled.button`
+display: block;
+padding: 8px 15px;
+border-radius: 4px;
+font-size: 12px;
+background-color: #CC0000;
+color: white;
+margin: 2em auto;
+border: none;
+transition: all 200ms ease-out 0s;
+
+&:hover {
+  background-color: rgb(170, 0, 0);
+  border-color: black;
+  cursor: pointer;
+}
+
+&:focus {
+  outline: gray 1px dashed;
+  outline-offset: 2px;
+}
+`
+
 
 class App extends React.Component {
   constructor(props) {
@@ -165,6 +221,7 @@ class App extends React.Component {
   render() {
     return (
       <Container >
+        <OverallRatings></OverallRatings>
         <Gallery images={this.images}></Gallery>
         <ReviewButton>Write a review</ReviewButton>
         <Filters checkBoxes={this.state.checkBoxes} handleCheckedBox={this.handleCheckedBox.bind(this)}/>
@@ -178,64 +235,5 @@ class App extends React.Component {
     )
   }
 }
-
-
-
-const Container = styled.div`
-  margin: 0 1.5em;
-  font-family: 'Helvetica Neue', Arial, sans-serif;
-  font-size: 15px;
-`;
-
-const List = styled.ul`
-  padding-inline-start: 0;
-`
-
-const Button = styled.button`
-  display: block;
-  padding: 8px 15px;
-  border:#888888 solid 1px;
-  border-radius: 4px;
-  font-size: 12px;
-  background-color: white;
-  color: #333333;
-  margin: 2em auto;
-  transition: all 200ms ease-out 0s;
-
-  &:hover {
-    background-color: rgb(240, 240, 240);
-    border-color: black;
-    cursor: pointer;
-  }
-
-  &:focus {
-    outline: gray 1px dashed;
-    outline-offset: 2px;
-  }
-`
-
-const ReviewButton = styled.button`
-display: block;
-padding: 8px 15px;
-border-radius: 4px;
-font-size: 12px;
-background-color: #CC0000;
-color: white;
-margin: 2em auto;
-border: none;
-transition: all 200ms ease-out 0s;
-
-&:hover {
-  background-color: rgb(170, 0, 0);
-  border-color: black;
-  cursor: pointer;
-}
-
-&:focus {
-  outline: gray 1px dashed;
-  outline-offset: 2px;
-}
-`
-
 
 ReactDOM.render(<App />, document.getElementById('root'));

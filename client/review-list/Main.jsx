@@ -4,31 +4,6 @@ import PercentageCircle from './PercentageCircle.jsx';
 import styled from 'styled-components';
 import moment from 'moment';
 
-const Main = ({ review, photosAdded}) => {
-  return (
-    <OuterContainer>
-      <Title>{review.title}</Title>
-      <Container>
-        <Ratings>
-          <Stars style={{ width: `${review.value_rating}%` }}></Stars>
-        </Ratings>
-        <Recommendation>
-          <Recommend recommend={review.would_recommend}/>
-        </Recommendation>
-      </Container>
-      <PostDetails>
-        {review.username} - {moment(review.createdAt).fromNow()}
-        {review.verified_purchaser ? <span>, <GreenText> Verified purchaser</GreenText></span> : ''}
-      </PostDetails>
-      {review.body}
-      <Gallery>
-        {review.images.map((url, i) => <img src={url} style={{ width: "100px", paddingRight: "1em" }} key={i}/>)}
-      </Gallery>
-    </OuterContainer>
-  );
-}
-
-
 const Ratings = styled.div `
   background: url("/images/stars_empty.svg");
   width: 87px;
@@ -81,5 +56,37 @@ const Gallery = styled.div`
 const GreenText = styled.span`
   color: rgb(0, 102, 1);
 `
+const Image = styled.img`
+width: 70px;
+height: 70px;
+margin: 0 7px;
+overflow: hidden;
+`
+
+
+const Main = ({ review, photosAdded }) => {
+
+  return (
+    <OuterContainer>
+      <Title>{review.title}</Title>
+      <Container>
+        <Ratings>
+          <Stars style={{ width: `${review.value_rating}%` }}></Stars>
+        </Ratings>
+        <Recommendation>
+          <Recommend recommend={review.would_recommend}/>
+        </Recommendation>
+      </Container>
+      <PostDetails>
+        {review.username} - {moment(review.createdAt).fromNow()}
+        {review.verified_purchaser ? <span>, <GreenText> Verified purchaser</GreenText></span> : ''}
+      </PostDetails>
+      {review.body}
+      <Gallery>
+        {review.images.map((url, i) => <Image src={url} key={i}/>)}
+      </Gallery>
+    </OuterContainer>
+  );
+}
 
 export default Main;
