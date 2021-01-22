@@ -4,7 +4,7 @@ import axios from 'axios';
 import Reviews from './review-list/Reviews.jsx';
 import Filters from './filters/Filters.jsx';
 import Gallery from './Gallery.jsx';
-import OverallRatings from './OverallRatings.jsx';
+import OverallRatings from './overall-ratings/OverallRatings.jsx';
 import styled from 'styled-components'
 
 class App extends React.Component {
