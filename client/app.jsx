@@ -9,9 +9,10 @@ import styled from 'styled-components'
 
 
 const Container = styled.div`
-  margin: 0 1.5em;
   font-family: 'Helvetica Neue', Arial, sans-serif;
   font-size: 15px;
+  width: 1230px;
+  margin: 0 auto;
 `
 const List = styled.ul`
   padding-inline-start: 0;

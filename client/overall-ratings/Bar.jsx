@@ -3,11 +3,17 @@ import styled from 'styled-components';
 
 const Container = styled.div`
   margin-bottom: 0.5em;
+  display: flex;
+  align-items: center;
 
   &:hover {
     text-decoration: underline;
     cursor: pointer;
   }
+`
+const PercentageBar = styled.span`
+  margin-right: 15px;
+  margin-left: 25px;
 `
 
 
@@ -16,10 +22,12 @@ function Bar({stars, rating}) {
   return (
     <Container>
       {stars} stars
-      <svg width="210px" height="9">
-          <line x1="10" y1="5" x2="200" y2="5" stroke="#F7F7F7" strokeWidth="8" strokeLinecap="round"/>
-          <line x1="10" y1="5" x2={2*rating} y2="5" stroke="green" strokeWidth="8" strokeLinecap="round"/>
+      <PercentageBar>
+      <svg width="200px" height="9">
+        <rect x="0" y="0" width="200" height="8" fill="#F7F7F7" stroke="none" rx="4"></rect>
+        <rect x="0" y="0" width={2 * rating} height="8" fill="green" stroke="none" rx="4"></rect>
       </svg>
+     </PercentageBar>
        {rating}%
     </Container>
 

@@ -7,7 +7,7 @@ import moment from 'moment';
 const Ratings = styled.div `
   background: url("/images/stars_empty.svg");
   width: 87px;
-  height: 16px;
+  height: 17px;
   display: inline-block;
   background-repeat: no-repeat;
   background-size: 87px 16px;
@@ -15,7 +15,7 @@ const Ratings = styled.div `
 `
 const Stars = styled.div`
   width: 0%;
-  height: 16px;
+  height: 17px;
   background-image: url("/images/stars_full.svg");
   background-repeat: no-repeat;
   background-size: 87px 16px;
