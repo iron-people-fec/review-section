@@ -9,11 +9,11 @@ function Filters({checkBoxes, handleCheckedBox}) {
       <Dropdown>sort by <strong>most recent</strong></Dropdown>
       <Dropdown>filter by <strong>all ratings</strong></Dropdown>
       </div>
-      <ul>
+      <Checkboxes>
       {checkBoxes.map((checkbox, i) => (
         <Checkbox checkbox={checkbox} handleCheckedBox={handleCheckedBox} key={i}/>
       ))}
-      </ul>
+      </Checkboxes>
     </Container>
   )
 }
@@ -35,6 +35,11 @@ border:#888888 solid 1px;
   background-color: white;
   color: #333333;
   margin-right: 1em;
+`
+
+const Checkboxes = styled.ul`
+  padding-inline-start: 0;
+  list-style-type: none;
 `
 
 export default Filters;
