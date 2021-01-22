@@ -2,48 +2,50 @@ import React from 'react';
 import styled from 'styled-components';
 import Helpful from './Helpful.jsx';
 
+const Container = styled.div`
+  width: 34%;
+  color: #666666;
+  font-size: 12px;
+`
+const Button = styled.button`
+  display: inline-block;
+  width: 120px;
+  padding: 8px 0;
+  border:#888888 solid 1px;
+  border-radius: 4px;
+  font-size: 12px;
+  background-color: white;
+  color: #333333;
+  margin: 0 2px;
+
+  &:hover {
+    background-color: rgb(240, 240, 240);
+    border-color: black;
+    cursor: pointer;
+  }
+
+  &:focus {
+    outline: gray 1px dashed;
+    outline-offset: 2px;
+  }
+`
+const Buttons = styled.div`
+  margin-top: 1.2em;
+`
+const Links = styled.div`
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: baseline;
+`
+const ReportLink = styled.div`
+  font-size: 14px;
+  text-decoration: underline;
+`
+
+
 const Aside = ({ review }) => {
 
-  const Container = styled.div`
-    width: 34%;
-    color: #666666;
-    font-size: 12px;
-  `
-  const Button = styled.button`
-    display: inline-block;
-    width: 120px;
-    padding: 8px 0;
-    border:#888888 solid 1px;
-    border-radius: 4px;
-    font-size: 12px;
-    background-color: white;
-    color: #333333;
-    margin: 0 2px;
-
-    &:hover {
-      background-color: rgb(240, 240, 240);
-      border-color: black;
-      cursor: pointer;
-    }
-
-    &:focus {
-      outline: gray 1px dashed;
-      outline-offset: 2px;
-    }
-  `
-  const Buttons = styled.div`
-    margin-top: 1.2em;
-  `
-  const Links = styled.div`
-    display: flex;
-    width: 100%;
-    justify-content: space-between;
-    align-items: baseline;
-  `
-  const ReportLink = styled.div`
-    font-size: 14px;
-    text-decoration: underline;
-  `
 
   return (
     <Container>

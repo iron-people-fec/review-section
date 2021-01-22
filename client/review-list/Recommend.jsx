@@ -1,12 +1,12 @@
 import React from 'react';
 import styled from 'styled-components'
 
-function Recommend({ recommend }) {
+const Container = styled.span`
+  display: flex;
+  align-items: center;
+`
 
-  const Container = styled.span`
-    display: flex;
-    align-items: center;
-  `
+function Recommend({ recommend }) {
 
   if (recommend) {
     return (

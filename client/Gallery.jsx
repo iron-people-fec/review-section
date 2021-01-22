@@ -1,18 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
 
-function Gallery({ images }) {
-  var selectedImages = images.length > 7 ? images.slice(0, 6) : images;
-
   const ImagesContainer = styled.div`
-    // width: 800px;
     height: 125px;
     margin: 0 auto;
     overflow: hidden;
     display: flex;
     justify-content: center;
   `
-
   const Image = styled.img`
     width: 125px;
     height: 125px;
@@ -28,7 +23,6 @@ function Gallery({ images }) {
       outline-offset: 2px;
     }
   `
-
   const Container = styled.div`
     margin: 0 auto;
     text-align: center;
@@ -53,6 +47,10 @@ function Gallery({ images }) {
       outline-offset: 2px;
     }
   `
+
+
+function Gallery({ images }) {
+  var selectedImages = images.length > 7 ? images.slice(0, 6) : images;
 
   return (
     <Container>

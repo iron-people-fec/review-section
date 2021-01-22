@@ -7,6 +7,61 @@ import Gallery from './Gallery.jsx';
 import OverallRatings from './overall-ratings/OverallRatings.jsx';
 import styled from 'styled-components'
 
+
+const Container = styled.div`
+  margin: 0 1.5em;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: 15px;
+`
+const List = styled.ul`
+  padding-inline-start: 0;
+`
+const Button = styled.button`
+  display: block;
+  padding: 8px 15px;
+  border:#888888 solid 1px;
+  border-radius: 4px;
+  font-size: 12px;
+  background-color: white;
+  color: #333333;
+  margin: 2em auto;
+  transition: all 200ms ease-out 0s;
+
+  &:hover {
+    background-color: rgb(240, 240, 240);
+    border-color: black;
+    cursor: pointer;
+  }
+
+  &:focus {
+    outline: gray 1px dashed;
+    outline-offset: 2px;
+  }
+`
+const ReviewButton = styled.button`
+display: block;
+padding: 8px 15px;
+border-radius: 4px;
+font-size: 12px;
+background-color: #CC0000;
+color: white;
+margin: 2em auto;
+border: none;
+transition: all 200ms ease-out 0s;
+
+&:hover {
+  background-color: rgb(170, 0, 0);
+  border-color: black;
+  cursor: pointer;
+}
+
+&:focus {
+  outline: gray 1px dashed;
+  outline-offset: 2px;
+}
+`
+
+
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -180,64 +235,5 @@ class App extends React.Component {
     )
   }
 }
-
-
-
-const Container = styled.div`
-  margin: 0 1.5em;
-  font-family: 'Helvetica Neue', Arial, sans-serif;
-  font-size: 15px;
-`;
-
-const List = styled.ul`
-  padding-inline-start: 0;
-`
-
-const Button = styled.button`
-  display: block;
-  padding: 8px 15px;
-  border:#888888 solid 1px;
-  border-radius: 4px;
-  font-size: 12px;
-  background-color: white;
-  color: #333333;
-  margin: 2em auto;
-  transition: all 200ms ease-out 0s;
-
-  &:hover {
-    background-color: rgb(240, 240, 240);
-    border-color: black;
-    cursor: pointer;
-  }
-
-  &:focus {
-    outline: gray 1px dashed;
-    outline-offset: 2px;
-  }
-`
-
-const ReviewButton = styled.button`
-display: block;
-padding: 8px 15px;
-border-radius: 4px;
-font-size: 12px;
-background-color: #CC0000;
-color: white;
-margin: 2em auto;
-border: none;
-transition: all 200ms ease-out 0s;
-
-&:hover {
-  background-color: rgb(170, 0, 0);
-  border-color: black;
-  cursor: pointer;
-}
-
-&:focus {
-  outline: gray 1px dashed;
-  outline-offset: 2px;
-}
-`
-
 
 ReactDOM.render(<App />, document.getElementById('root'));
