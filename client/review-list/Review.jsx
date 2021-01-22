@@ -26,7 +26,6 @@ class Review extends React.Component {
   }
 }
 
-
 const ReviewContainer = styled.li`
   list-style: none;
   padding: 20px;

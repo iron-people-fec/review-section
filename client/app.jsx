@@ -4,6 +4,7 @@ import axios from 'axios';
 import Reviews from './review-list/Reviews.jsx';
 import Filters from './filters/Filters.jsx';
 import Gallery from './Gallery.jsx';
+import OverallRatings from './OverallRatings.jsx';
 import styled from 'styled-components'
 
 class App extends React.Component {
@@ -165,6 +166,7 @@ class App extends React.Component {
   render() {
     return (
       <Container >
+        <OverallRatings></OverallRatings>
         <Gallery images={this.images}></Gallery>
         <ReviewButton>Write a review</ReviewButton>
         <Filters checkBoxes={this.state.checkBoxes} handleCheckedBox={this.handleCheckedBox.bind(this)}/>
