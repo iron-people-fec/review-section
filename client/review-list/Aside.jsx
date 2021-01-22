@@ -2,9 +2,9 @@ import React from 'react';
 import styled from 'styled-components';
 import Helpful from './Helpful.jsx';
 
-const ReviewAside = ({review}) => {
+const Aside = ({review}) => {
   return (
-    <Aside>
+    <Container>
       <img src="https://i.ibb.co/pPgyT3v/screen-shot-2021-01-20-at-12-43-09-AM.png" style={{ height: "110px"}}></img>
       <div className="helpful-form">
         <span>{review.helpful_count <= 0 ? "Did you find this review helpful?" : <Helpful helpful_count={ review.helpful_count}/>} </span>
@@ -17,11 +17,11 @@ const ReviewAside = ({review}) => {
         </Links>
       </div>
 
-    </Aside>
+    </Container>
   );
 }
 
-const Aside = styled.div`
+const Container = styled.div`
   width: 34%;
   color: #666666;
   font-size: 12px;
@@ -67,4 +67,4 @@ const ReportLink = styled.div`
 `
 
 
-export default ReviewAside;
+export default Aside;

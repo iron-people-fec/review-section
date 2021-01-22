@@ -1,32 +1,30 @@
 import React from 'react';
-import WouldRecommend from './WouldRecommend.jsx';
-import WouldNotRecommend from './WouldNotRecommend.jsx';
-import Verified from './Verified.jsx';
+import Recommend from './Recommend.jsx';
 import PercentageCircle from './PercentageCircle.jsx';
 import styled from 'styled-components';
 import moment from 'moment';
 
-const ReviewMain = ({review, images}) => {
+const Main = ({ review, photosAdded}) => {
   return (
-    <Main>
+    <OuterContainer>
       <Title>{review.title}</Title>
       <Container>
         <Ratings>
           <Stars style={{ width: `${review.value_rating}%` }}></Stars>
         </Ratings>
         <Recommendation>
-          {review.would_recommend ? <WouldRecommend /> : <WouldNotRecommend />}
+          <Recommend recommend={review.would_recommend}/>
         </Recommendation>
       </Container>
       <PostDetails>
         {review.username} - {moment(review.createdAt).fromNow()}
-        {review.verified_purchaser ? <Verified /> : ''}
+        {review.verified_purchaser ? <span>, <GreenText> Verified purchaser</GreenText></span> : ''}
       </PostDetails>
       {review.body}
       <Gallery>
-        {images.map((image, i) => (<img src={image.url} style={{ width: "100px", "padding-right": "1em" }} />))}
+        {review.images.map((url, i) => <img src={url} style={{ width: "100px", paddingRight: "1em" }} key={i}/>)}
       </Gallery>
-    </Main>
+    </OuterContainer>
   );
 }
 
@@ -49,7 +47,7 @@ const Stars = styled.div`
 
 `
 
-const Main = styled.div`
+const OuterContainer = styled.div`
   width: 64%;
 `
 
@@ -80,4 +78,8 @@ const Gallery = styled.div`
   margin-top: 1em;
 `
 
-export default ReviewMain;
+const GreenText = styled.span`
+  color: rgb(0, 102, 1);
+`
+
+export default Main;

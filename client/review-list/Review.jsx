@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components'
-import ReviewMain from './ReviewMain.jsx';
-import ReviewAside from './ReviewAside.jsx';
+import Main from './Main.jsx';
+import Aside from './Aside.jsx';
 import axios from 'axios';
 
 class Review extends React.Component {
@@ -13,20 +13,14 @@ class Review extends React.Component {
   }
 
   componentDidMount() {
-    // console.log('hey')
-    axios.get(`/products/${this.props.review.id}/images`)
-      .then((response) => {
-          this.setState({
-            images: response.data
-          });
-        });
+    this.props.addPhotos(this.props.review.id)
   }
 
   render() {
     return (
       < ReviewContainer >
-        <ReviewMain review={this.props.review} images={this.state.images}/>
-      <ReviewAside review={this.props.review} />
+        <Main review={this.props.review} photosAdded={this.props.photosAdded}/>
+      <Aside review={this.props.review} />
     </ReviewContainer>
     )
   }
