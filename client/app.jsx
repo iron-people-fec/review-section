@@ -6,6 +6,7 @@ import Filters from './filters/Filters.jsx';
 import Gallery from './Gallery.jsx';
 import OverallRatings from './overall-ratings/OverallRatings.jsx';
 import styled from 'styled-components'
+import Modal from './Modal.jsx';
 
 
 const Container = styled.div`
@@ -46,7 +47,7 @@ border-radius: 4px;
 font-size: 12px;
 background-color: #CC0000;
 color: white;
-margin: 2em auto;
+margin: 2.5em auto;
 border: none;
 transition: all 200ms ease-out 0s;
 
@@ -232,6 +233,7 @@ class App extends React.Component {
         </List>
         <Button onClick={this.handleLoadMore.bind(this)} style={{ display: this.state.hiddenNum <= 0 ? "none" : "block" }}>load {this.state.hiddenNum} more</Button>
         <ReviewButton>Write a review</ReviewButton>
+        {/* <Modal/> */}
       </Container>
     )
   }
