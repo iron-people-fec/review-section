@@ -12,6 +12,8 @@ function Recommend({ recommend }) {
     return (
       <Container><img src="/images/check.svg" style={{ width: "22px", marginRight: "5px" }}></img> <strong> Would recommend</strong></Container>
     )
+  } else if (recommend === null) {
+    return null;
   } else if (!recommend) {
     return (
       <Container><img src="/images/ex.svg" style={{ width: "22px", marginRight: "5px" }}></img><strong> Would not recommend</strong></Container>

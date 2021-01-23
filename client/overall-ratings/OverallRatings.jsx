@@ -7,8 +7,10 @@ const Container = styled.div`
 `
 const Stats = styled.div`
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
   align-items: center;
+  width: 55%;
+  margin: 0 auto;
 `
 const BarRatings = styled.div`
 display: flex;
@@ -17,6 +19,7 @@ font-size: 12px;
 `
 
 const StarRatings = styled.div`
+font-size: 13px;
 `
 const LargeText = styled.span`
   font-weight: bold;
@@ -28,26 +31,50 @@ const LargeText = styled.span`
 
 const Ratings = styled.div `
   background: url("/images/stars_empty.svg");
-  width: 150px;
+  width: 102px;
   height: 20px;
   display: inline-block;
   background-repeat: no-repeat;
-  background-size: 150px 20px;
+  background-size: 102px 20px;
 
 `
 const Stars = styled.div`
-  width: 0%;
+  width: 20%;
   height: 20px;
   background-image: url("/images/stars_full.svg");
   background-repeat: no-repeat;
-  background-size: 150px 20px;
+  background-size: 102px 20px;
 
 `
 const CircleRatings = styled.div`
 
 `
 
-function OverallRatings() {
+function OverallRatings({ reviews }) {
+
+  const rating = function () {
+    var overallSum = reviews.reduce(function(sum, review){
+      return sum + review.overall_rating;
+    }, 0)
+
+    var overallPercentage = `${(overallSum / (reviews.length * 100)) * 100}%`;
+    var starsNumber = `${Math.round(((overallSum / (reviews.length * 100)) * 5) * 10) / 10}`;
+    return { overallPercentage: overallPercentage, starsNumber: starsNumber}
+  }
+
+  const recommendation = function() {
+    var number = reviews.filter(review => review.would_recommend === true);
+    var percentage = Math.round(((number.length / reviews.length) * 100) * 10) / 10;
+    return {number: number.length, percentage: percentage}
+  }
+
+  const starBars = function () {
+    var hey = reviews.map(review => review.overall_rating)
+    console.log(hey)
+    // for(review of reviews) {
+
+    // }
+  }()
 
   return (
     <Container>
@@ -63,21 +90,22 @@ function OverallRatings() {
 
         <StarRatings>
           <LargeText>
-            4.7
+            {rating().starsNumber}
             </LargeText>
              <br></br>
           <Ratings>
-          <Stars style={{ width: "90%" }}></Stars>
+          <Stars style={{ width: rating().overallPercentage }}></Stars>
             </Ratings>
             <br></br>
-            474 star ratings
+            {reviews.length} star ratings
         </StarRatings>
+
         <CircleRatings>
           <img src="https://i.ibb.co/xmVTk3B/screen-shot-2021-01-22-at-2-52-09-PM.png" width="80px"></img>
           <br></br>
-          <strong>92% would recommend</strong>
+          <strong>{recommendation().percentage}% would recommend</strong>
           <br></br>
-        260 recommendations
+        {recommendation().number} recommendations
         </CircleRatings>
       </Stats>
       <img src="https://i.ibb.co/pPgyT3v/screen-shot-2021-01-20-at-12-43-09-AM.png" style={{ height: "110px"}}></img>

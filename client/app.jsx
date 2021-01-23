@@ -222,7 +222,7 @@ class App extends React.Component {
   render() {
     return (
       <Container >
-        <OverallRatings></OverallRatings>
+        <OverallRatings reviews={this.state.displayedReviews}></OverallRatings>
         <Gallery images={this.images}></Gallery>
         <ReviewButton>Write a review</ReviewButton>
         <Filters checkBoxes={this.state.checkBoxes} handleCheckedBox={this.handleCheckedBox.bind(this)}/>

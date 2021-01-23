@@ -36,11 +36,26 @@ const helpCnt = function () {
   return stars[Math.floor(Math.random() * 7)]
 }
 
+const getOverall = function (quality, value) {
+  total = ((quality + value) / 2) / 10
+  if (total % 2 !== 0) {
+    total++
+  }
+  return total * 10;
+}
+
+const recommend = function (overall) {
+  var chance = Math.floor(Math.random() * 4);
+  if (chance > 2) {
+    return overall > 70 ? true : false;
+  }
+  return null;
+}
+
 const review = function (i, trend) {
   let quality = percentage(trend);
   let value = percentage(trend);
-  let overall = (quality + value) / 2
-  recommend = overall > 70 ? true : false;
+  let overall = getOverall(quality, value);
   return {
     title: titles(),
     body: faker.commerce.productDescription().slice(0, 254),
@@ -50,14 +65,14 @@ const review = function (i, trend) {
     overall_rating: overall,
     value_rating: value,
     quality_rating: quality,
-    would_recommend: recommend,
+    would_recommend: recommend(overall),
     verified_purchaser: Math.floor(Math.random() * 3) > 1 ? true : false
   }
 }
 
 const getTrend = function () {
   let trends = ['low', 'low', 'mid', 'mid', 'mid', 'high'];
-  return trend = trends[Math.floor(Math.random() * 6)];
+  return trends[Math.floor(Math.random() * 6)];
 }
 
 var photo = function (i) {
