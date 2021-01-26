@@ -82,7 +82,7 @@ class App extends React.Component {
   }
 
   handleGetReviews() {
-    axios.get('/products/1/reviews')
+    axios.get('http://localhost:8004/products/1/reviews')
     .then((response) => {
       const responseReviews = response.data.slice()
       for (let review of responseReviews) {
@@ -100,7 +100,7 @@ class App extends React.Component {
   }
 
   addPhotos(id) {
-    axios.get(`/products/${id}/images`)
+    axios.get(`http://localhost:8004/products/1/images`)
       .then((response) => {
         if (response.data.length !== 0) {
           var reviewsEdited = [...this.state.allReviews]

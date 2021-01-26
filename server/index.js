@@ -8,7 +8,7 @@ const Photo = require('../database/models.js').Photo
 const cors = require('cors');
 
 app.use(cors({
-  origin: 'http://localhost:8004'
+  origin: 'http://localhost:3000'
 }));
 
 app.use(express.json());

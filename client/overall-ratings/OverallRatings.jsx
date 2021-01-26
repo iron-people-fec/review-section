@@ -30,7 +30,7 @@ const LargeText = styled.span`
 `
 
 const Ratings = styled.div `
-  background: url("/images/stars_empty.svg");
+  background: url("http://localhost:8004/images/stars_empty.svg");
   width: 102px;
   height: 20px;
   display: inline-block;
@@ -41,7 +41,7 @@ const Ratings = styled.div `
 const Stars = styled.div`
   width: 20%;
   height: 20px;
-  background-image: url("/images/stars_full.svg");
+  background-image: url("http://localhost:8004/images/stars_full.svg");
   background-repeat: no-repeat;
   background-size: 102px 20px;
 
