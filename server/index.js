@@ -1,20 +1,19 @@
 const express = require('express');
 const app = express();
 const path = require('path');
-const port = 8080;
+const port = 8004;
 const db = require('../database')
 const Review = require('../database/models.js').Review
 const Photo = require('../database/models.js').Photo
+const cors = require('cors');
 
-// try {
-//   db.authenticate();
-//   console.log('Connection has been established successfully.');
-// } catch (error) {
-//   console.error('Unable to connect to the database:', error);
-// }
+app.use(cors({
+  origin: 'http://localhost:8000'
+}));
 
 app.use(express.json());
 app.use(express.static(path.join(__dirname, '../public')));
+app.use('/bundle', express.static('public/dist/bundle.js'));
 
 
 app.get('/products/:product_id/reviews', (req, res) => {

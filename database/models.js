@@ -41,7 +41,7 @@ var Review = db.define('Review', {
   },
   would_recommend: {
     type: DataTypes.BOOLEAN,
-    allowNull: false
+    allowNull: true
   },
   verified_purchaser: {
     type: DataTypes.BOOLEAN,

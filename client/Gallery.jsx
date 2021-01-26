@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import Modal from './Modal.jsx';
 
   const ImagesContainer = styled.div`
     height: 125px;
@@ -25,6 +26,7 @@ import styled from 'styled-components';
   `
   const Container = styled.div`
     margin: 0 auto;
+    margin-bottom: 3em;
     text-align: center;
   `
   const MoreImages = styled.div`
@@ -48,19 +50,32 @@ import styled from 'styled-components';
     }
   `
 
+class Gallery extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      currentReviewIndex: 0
+    }
+  }
 
-function Gallery({ images }) {
-  var selectedImages = images.length > 7 ? images.slice(0, 6) : images;
 
-  return (
-    <Container>
-      <h3>Review Images</h3>
-      <ImagesContainer>
-        {selectedImages.map((image, i) => <Image key={ i} src={image} />)}
-        <MoreImages>See more review images</MoreImages>
-      </ImagesContainer>
-    </Container>
-  )
+  render() {
+    var selectedImages = this.props.images.length > 7 ? this.props.images.slice(0, 6) : this.props.images;
+    // var handleClickedImage = function (i=0) {
+
+      // }
+    return (
+      <Container>
+        <h3>Review Images</h3>
+        <ImagesContainer>
+          {selectedImages.map((image, i) => <Image key={ i} src={image} handleClickedImage={() => handleClickedImage(i)}/>)}
+          <MoreImages>See more review images</MoreImages>
+        </ImagesContainer>
+        <Modal reviews={this.props.reviews}/>
+      </Container>
+    )
+  }
+
 }
 
 export default Gallery;

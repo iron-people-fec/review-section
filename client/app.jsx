@@ -6,12 +6,14 @@ import Filters from './filters/Filters.jsx';
 import Gallery from './Gallery.jsx';
 import OverallRatings from './overall-ratings/OverallRatings.jsx';
 import styled from 'styled-components'
+import Modal from './Modal.jsx';
 
 
 const Container = styled.div`
-  margin: 0 1.5em;
   font-family: 'Helvetica Neue', Arial, sans-serif;
   font-size: 15px;
+  width: 1230px;
+  margin: 0 auto;
 `
 const List = styled.ul`
   padding-inline-start: 0;
@@ -45,7 +47,7 @@ border-radius: 4px;
 font-size: 12px;
 background-color: #CC0000;
 color: white;
-margin: 2em auto;
+margin: 2.5em auto;
 border: none;
 transition: all 200ms ease-out 0s;
 
@@ -80,7 +82,7 @@ class App extends React.Component {
   }
 
   handleGetReviews() {
-    axios.get('/products/1/reviews')
+    axios.get('http://localhost:8004/products/1/reviews')
     .then((response) => {
       const responseReviews = response.data.slice()
       for (let review of responseReviews) {
@@ -98,7 +100,7 @@ class App extends React.Component {
   }
 
   addPhotos(id) {
-    axios.get(`/products/${id}/images`)
+    axios.get(`http://localhost:8004/products/1/images`)
       .then((response) => {
         if (response.data.length !== 0) {
           var reviewsEdited = [...this.state.allReviews]
@@ -215,14 +217,15 @@ class App extends React.Component {
   }
 
   componentDidMount() {
+    console.log(window.location.pathname.slice());
     this.handleGetReviews();
   }
 
   render() {
     return (
       <Container >
-        <OverallRatings></OverallRatings>
-        <Gallery images={this.images}></Gallery>
+        <OverallRatings reviews={this.state.displayedReviews}></OverallRatings>
+        <Gallery images={this.images} reviews={this.state.allReviews}></Gallery>
         <ReviewButton>Write a review</ReviewButton>
         <Filters checkBoxes={this.state.checkBoxes} handleCheckedBox={this.handleCheckedBox.bind(this)}/>
         <span>We found {this.state.allReviews.length} matching reviews</span>
@@ -231,9 +234,10 @@ class App extends React.Component {
         </List>
         <Button onClick={this.handleLoadMore.bind(this)} style={{ display: this.state.hiddenNum <= 0 ? "none" : "block" }}>load {this.state.hiddenNum} more</Button>
         <ReviewButton>Write a review</ReviewButton>
+        {/* <Modal/> */}
       </Container>
     )
   }
 }
 
-ReactDOM.render(<App />, document.getElementById('root'));
+ReactDOM.render(<App />, document.getElementById('bullseye-reviews'));
