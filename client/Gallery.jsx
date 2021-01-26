@@ -50,24 +50,32 @@ import Modal from './Modal.jsx';
     }
   `
 
-
-function Gallery({ images }) {
-  var selectedImages = images.length > 7 ? images.slice(0, 6) : images;
-
-  var handleClickedImage = function (i=0) {
-
+class Gallery extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      currentReviewIndex: 0
+    }
   }
 
-  return (
-    <Container>
-      <h3>Review Images</h3>
-      <ImagesContainer>
-        {selectedImages.map((image, i) => <Image key={ i} src={image} handleClickedImage={() => handleClickedImage(i)}/>)}
-        <MoreImages>See more review images</MoreImages>
-      </ImagesContainer>
-      <Modal/>
-    </Container>
-  )
+
+  render() {
+    var selectedImages = this.props.images.length > 7 ? this.props.images.slice(0, 6) : this.props.images;
+    // var handleClickedImage = function (i=0) {
+
+      // }
+    return (
+      <Container>
+        <h3>Review Images</h3>
+        <ImagesContainer>
+          {selectedImages.map((image, i) => <Image key={ i} src={image} handleClickedImage={() => handleClickedImage(i)}/>)}
+          <MoreImages>See more review images</MoreImages>
+        </ImagesContainer>
+        <Modal reviews={this.props.reviews}/>
+      </Container>
+    )
+  }
+
 }
 
 export default Gallery;

@@ -217,6 +217,7 @@ class App extends React.Component {
   }
 
   componentDidMount() {
+    console.log(window.location.pathname.slice());
     this.handleGetReviews();
   }
 
@@ -224,7 +225,7 @@ class App extends React.Component {
     return (
       <Container >
         <OverallRatings reviews={this.state.displayedReviews}></OverallRatings>
-        <Gallery images={this.images}></Gallery>
+        <Gallery images={this.images} reviews={this.state.allReviews}></Gallery>
         <ReviewButton>Write a review</ReviewButton>
         <Filters checkBoxes={this.state.checkBoxes} handleCheckedBox={this.handleCheckedBox.bind(this)}/>
         <span>We found {this.state.allReviews.length} matching reviews</span>
@@ -239,4 +240,4 @@ class App extends React.Component {
   }
 }
 
-ReactDOM.render(<App />, document.getElementById('root'));
+ReactDOM.render(<App />, document.getElementById('bullseye-reviews'));
