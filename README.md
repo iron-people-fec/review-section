@@ -16,7 +16,9 @@
 
 ## Usage
 
-> Some usage instructions
+-npm run build
+-npm start
+-npm seed
 
 ## Requirements
 

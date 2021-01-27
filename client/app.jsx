@@ -73,16 +73,14 @@ class App extends React.Component {
       selectedReviews: [],
       displayedReviews: [],
       hiddenNum: 0,
-      checkBoxes: [
-        {id: 0, value: "with photos", isChecked: false},
-        {id: 1, value: "verified purchases", isChecked: false}
-      ],
-      allPhotos: []
+      allPhotos: [],
+      verified: false,
+      withPhotos: false
     }
   }
 
   handleGetReviews() {
-    axios.get('http://localhost:8004/products/1/reviews')
+    axios.get('http://localhost:8004/products/0/reviews')
     .then((response) => {
       const responseReviews = response.data.slice()
       for (let review of responseReviews) {
@@ -100,11 +98,11 @@ class App extends React.Component {
   }
 
   addPhotos(id) {
-    axios.get(`http://localhost:8004/products/1/images`)
+    axios.get(`http://localhost:8004/products/0/images`)
       .then((response) => {
         if (response.data.length !== 0) {
-          var reviewsEdited = [...this.state.allReviews]
-          for (var review of reviewsEdited) {
+          var reviewList = this.state.allReviews.slice();
+          for (let review of reviewList) {
             if (review.id === id) {
               review.images = response.data.map((img) => (
                 img.url
@@ -114,92 +112,22 @@ class App extends React.Component {
           }
 
           this.setState({
-            allReviews: reviewsEdited
+            allReviews: reviewList,
+            displayedReviews: reviewList
           });
         }
-    });
+      });
   }
 
-
-  handleCheckedBox() {
-    const newCheckboxes = [...this.state.checkBoxes]
-    var clickedObj;
-    for (var obj of newCheckboxes) {
-        if (obj.value === event.target.value) {
-          obj.isChecked = obj.isChecked ? false : true;
-          clickedObj = obj;
-          }
-    }
-    this.setState({
-      checkBoxes: newCheckboxes,
-    });
-
-    if (clickedObj.value === "with photos") {
-      if (clickedObj.isChecked) {
-        this.handleCheckPhotoFilter()
-      } else {
-        this.handleUncheckPhotoFilter()
-      }
-    } else {
-      if (clickedObj.isChecked) {
-        this.handleCheckVerifiedFilter()
-      } else {
-        this.handleUncheckVerifiedFilter()
-      }
-    }
-  }
-
-  handleCheckPhotoFilter() {
-    var selected = []
-    for (let review of this.state.allReviews) {
-      if (review.images.length > 0) {
-        selected.push(review);
-      }
-    }
-    this.setState({
-      selectedReviews: selected
-    }, ()=>this.handleDisplayedReviews());
-  }
-
-  handleUncheckVerifiedFilter() {
-    this.setState({
-      selectedReviews: this.state.allReviews
-    }, ()=>this.handleDisplayedReviews());
-  }
-
-  handleCheckVerifiedFilter() {
-    var selected = []
-    for (let review of this.state.allReviews) {
-      console.log(review.verified_purchaser);
-      if (review.verified_purchaser) {
-        selected.push(review);
-      }
-    }
-    this.setState({
-      selectedReviews: selected
-    }, ()=>this.handleDisplayedReviews());
-  }
-
-  handleUncheckPhotoFilter() {
-    this.setState({
-      selectedReviews: this.state.allReviews
-    }, ()=>this.handleDisplayedReviews());
-  }
 
   handleDisplayedReviews() {
-    console.log(this.state.selectedReviews)
-    if (this.state.selectedReviews.length <= 8) {
-      var toDisplay = this.state.selectedReviews.slice();
-      var num = 0;
-    } else {
-      var toDisplay = this.state.selectedReviews.slice(0, 8);
-      var num = this.state.selectedReviews.length - 8
-    }
+    var toDisplay = this.state.selectedReviews.slice();
 
     this.setState({
       displayedReviews: toDisplay
     });
   }
+
 
   handleLoadMore() {
     if (this.state.hiddenNum < 8) {
@@ -216,8 +144,59 @@ class App extends React.Component {
     });
   }
 
+  // filterByPhotos(reapply = false) {
+  //   if (reapply === true) {
+  //     var reviewsWithPhotos = this.state.allReviews.filter(review => review.images.length !== 0);
+  //     this.setState({
+  //       selectedReviews: reviewsWithPhotos
+  //     });
+  //   } else {
+  //     if (this.state.withPhotos) {
+  //       if (this.state.filters) {
+  //         filterByVerified(true)
+  //       } else {
+  //         this.setState({
+  //           selectedReviews: this.state.allReviews
+  //         });
+  //       }
+  //     } else {
+  //       var reviewsWithPhotos = this.state.selectedReviews.filter(review => review.images.length !== 0);
+  //       console.log(reviewsWithPhotos)
+  //       this.setState({
+  //         selectedReviews: reviewsWithPhotos
+  //       });
+  //     }
+  //     this.setState({
+  //       withPhotos: !this.state.withPhotos
+  //     });
+  //   }
+  //   this.this.handleDisplayedReviews()
+  // }
+
+  // filterByVerified(reapply = false) {
+  //   if (reapply === true) {
+  //     var verifiedPurchases = this.state.allReviews.filter(review => review.verified_purchaser === true);
+  //       this.setState({
+  //         selectedReviews: verifiedPurchases
+  //       });
+  //   } else {
+  //     if (this.state.withPhotos) {
+  //       if (this.state.filters) filterByVerified(true)
+  //     } else {
+  //       var verifiedPurchases = this.state.selectedReviews.filter(review => review.verified_purchaser === true);
+  //       this.setState({
+  //         selectedReviews: verifiedPurchases
+  //       }, this.handleDisplayedReviews());
+  //     }
+  //     this.setState({
+  //       verified: !this.state.verified
+  //     });
+  //   }
+  // }
+
+
   componentDidMount() {
-    console.log(window.location.pathname.slice());
+    // console.log(window.location.pathname.slice());
     this.handleGetReviews();
   }
 
@@ -227,10 +206,10 @@ class App extends React.Component {
         <OverallRatings reviews={this.state.displayedReviews}></OverallRatings>
         <Gallery images={this.images} reviews={this.state.allReviews}></Gallery>
         <ReviewButton>Write a review</ReviewButton>
-        <Filters checkBoxes={this.state.checkBoxes} handleCheckedBox={this.handleCheckedBox.bind(this)}/>
+        {/* <Filters verified={this.state.verified} withPhotos={this.state.withPhotos} filterByVerified={this.filterByVerified.bind(this)} filterByPhotos={this.filterByPhotos.bind(this)}/> */}
         <span>We found {this.state.allReviews.length} matching reviews</span>
         <List>
-          <Reviews reviews={this.state.displayedReviews} addPhotos={this.addPhotos.bind(this)} photosAdded={this.state.photosAdded}/>
+          <Reviews reviews={this.state.displayedReviews} addPhotos={this.addPhotos.bind(this)}/>
         </List>
         <Button onClick={this.handleLoadMore.bind(this)} style={{ display: this.state.hiddenNum <= 0 ? "none" : "block" }}>load {this.state.hiddenNum} more</Button>
         <ReviewButton>Write a review</ReviewButton>

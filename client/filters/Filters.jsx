@@ -37,7 +37,7 @@ margin-left: 20px;
 `
 
 
-function Filters({ checkBoxes, handleCheckedBox }) {
+function Filters({ verified, withPhotos, filterByVerified, filterByPhotos}) {
 
   return (
     <Container>
@@ -54,9 +54,8 @@ function Filters({ checkBoxes, handleCheckedBox }) {
         </Dropdown>
       </div>
       <Checkboxes>
-      {checkBoxes.map((checkbox, i) => (
-        <Checkbox checkbox={checkbox} handleCheckedBox={handleCheckedBox} key={i}/>
-      ))}
+        <Checkbox checkbox={'With photos'} filter={filterByPhotos} isChecked={withPhotos} />
+        <Checkbox checkbox={'Verified purchases'} filter={filterByVerified} isChecked={verified}/>
       </Checkboxes>
     </Container>
   )

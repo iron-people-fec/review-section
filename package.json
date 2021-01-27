@@ -1,5 +1,5 @@
 {
-  "name": "",
+  "name": "bullseye-reviews",
   "version": "",
   "description": "",
   "author": "Lexy Kramer",
@@ -10,7 +10,7 @@
   "scripts": {
     "build": "npx webpack -w",
     "start": "nodemon server",
-    "seed-db": "node ./database/seeder.js"
+    "seed": "node ./database/seeder.js"
   },
   "dependencies": {
     "axios": "^0.21.1",

@@ -70,7 +70,7 @@ function OverallRatings({ reviews }) {
 
   const starBars = function () {
     var hey = reviews.map(review => review.overall_rating)
-    console.log(hey)
+    // console.log(hey)
     // for(review of reviews) {
 
     // }

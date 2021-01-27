@@ -1,10 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
 
-function Checkbox({ checkbox, handleCheckedBox}) {
+function Checkbox({ checkbox, isChecked, filter}) {
   return (
     <li>
-      <input type="checkbox" checked={checkbox.isChecked} onChange={handleCheckedBox} value={checkbox.value} /> {checkbox.value}
+      <input type="checkbox" checked={isChecked} onChange={filter}/> {checkbox}
     </li>
   )
 

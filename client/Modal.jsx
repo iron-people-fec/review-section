@@ -61,11 +61,10 @@ const Right = styled.div`
 function Modal({ reviews }) {
 
   var reviewsWithPics = reviews.filter(review => review.images.length !== 0);
-  // console.log(reviewsWithPics)
+
   var hi = reviewsWithPics.map(review => {
     <img src={review.images[0]}></img>
   })
-  console.log(hi)
   var handleClosePopup = function () {
 
   }

@@ -35,5 +35,6 @@ app.get('/products/:review_id/images', (req, res) => {
 db.sync().then(() => {
   app.listen(port, () => {
     console.log(`Now listening on port ${port}`)
+    console.log('connected to db')
   })
 })

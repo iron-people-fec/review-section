@@ -64,7 +64,7 @@ overflow: hidden;
 `
 
 
-const Main = ({ review, photosAdded }) => {
+const Main = ({ review }) => {
 
   return (
     <OuterContainer>
