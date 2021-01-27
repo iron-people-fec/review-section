@@ -27,9 +27,9 @@ class Review extends React.Component {
 
   render() {
     return (
-      < ReviewContainer >
+      <ReviewContainer>
         <Main review={this.review}/>
-        <Aside review={this.review}/>
+        <Aside review={this.review} helpful={this.props.helpful} notHelpful={this.props.notHelpful} id={this.props.id}/>
       </ReviewContainer>
     )
   }
