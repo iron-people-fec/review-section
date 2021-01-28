@@ -1,6 +1,5 @@
 import React from 'react';
-import Recommend from './Recommend.jsx';
-import PercentageCircle from './PercentageCircle.jsx';
+import Recommend from './small-components/Recommend.jsx';
 import styled from 'styled-components';
 import moment from 'moment';
 
@@ -27,7 +26,7 @@ const OuterContainer = styled.div`
 `
 
 const Title = styled.h3`
-  font-size: 19px;
+  font-size: 18px;
   margin-top: 0;
 `
 

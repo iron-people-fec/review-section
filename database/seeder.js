@@ -84,15 +84,13 @@ var photo = function (i) {
 
 reviewCnt = 0;
 
-while (reviewCnt < 100) {
-  for (let i = 0; i <= 11; i++) {
-    var max = Math.floor(Math.random() * 10) + 2
-    let trend = getTrend()
-    for (let j = 0; j < max; j++) {
-      var currentReview = review(i, trend)
-      Review.create(currentReview)
-      reviewCnt++;
-    }
+for (let i = 0; i <= 5; i++) {
+  var max = Math.floor(Math.random() * 50) + 10
+  let trend = getTrend()
+  for (let j = 0; j < max; j++) {
+    var currentReview = review(i, trend)
+    Review.create(currentReview)
+    reviewCnt++;
   }
 }
 

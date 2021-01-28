@@ -32,6 +32,14 @@ app.get('/products/:review_id/images', (req, res) => {
   }).then(data => res.send(data));
 })
 
+app.patch('/products/:id/helpful', (req, res) => {
+  Review.update({ helpful_count: db.literal('helpful_count + 1') }, { where: { id: req.params.id } });
+})
+
+app.patch('/products/:id/not_helpful', (req, res) => {
+  Review.update({ helpful_count: db.literal('helpful_count - 1') }, { where: { id: req.params.id } });
+})
+
 db.sync().then(() => {
   app.listen(port, () => {
     console.log(`Now listening on port ${port}`)

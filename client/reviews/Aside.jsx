@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import Helpful from './small-components/Helpful.jsx';
+import Stats from './small-components/Stats.jsx';
 
 const Container = styled.div`
   width: 34%;
@@ -29,6 +30,22 @@ const Button = styled.button`
     outline-offset: 2px;
   }
 `
+
+const ButtonDisabled = styled.button`
+  display: inline-block;
+  width: 120px;
+  padding: 8px 0;
+  border:#888888 solid 1px;
+  border-radius: 4px;
+  font-size: 12px;
+  background-color: black;
+  color: white;
+  margin: 0 2px;
+
+  &:focus {
+    outline: none;
+  }
+`
 const Buttons = styled.div`
   margin-top: 1.2em;
 `
@@ -43,25 +60,60 @@ const ReportLink = styled.div`
   text-decoration: underline;
 `
 
+class Aside extends React.Component {
+  constructor(props) {
+    super(props);
+    this.review = this.props.review;
+    this.helpful = this.props.helpful;
+    this.notHelpful = this.props.notHelpful;
+    this.id = this.props.id
+    this.state = {
+      buttonsEnabled: true,
+      helpful: { background: 'rgb(51, 51, 51)' },
+      unhelpful: { background: 'rgb(51, 51, 51)' }
+    }
+  }
 
-const Aside = ({ review, helpful, notHelpful, id}) => {
+  render() {
+    const theme = {
+      background: 'rgb(51, 51, 51)',
+      color: 'white'
+    };
 
-
-  return (
-    <Container>
-      <img src="https://i.ibb.co/pPgyT3v/screen-shot-2021-01-20-at-12-43-09-AM.png" style={{ height: "110px"}}></img>
-      <div className="helpful-form">
-        <span>{review.helpful_count <= 0 ? "Did you find this review helpful?" : <Helpful helpful_count={ review.helpful_count}/>} </span>
-        <Links>
-        <Buttons>
-          <Button onClick={() => helpful(review.id)} data-id={id}>Helpful</Button>
-          <Button onClick={() => notHelpful(review.id)} data-id={id}>Not helpful</Button>
-        </Buttons>
-        <ReportLink>Report review</ReportLink>
-        </Links>
-      </div>
-    </Container>
-  );
+    if (this.state.buttonsEnabled) {
+      return (
+        <Container>
+          <Stats review={this.review}></Stats>
+          <div className="helpful-form">
+            <span>{this.review.helpful_count <= 0 ? "Did you find this review helpful?" : <Helpful helpful_count={ this.review.helpful_count}/>} </span>
+            <Links>
+            <Buttons>
+              <Button className="disabledCursor" onClick={() => this.helpful(this.review.id)} data-id={this.id}>Helpful</Button>
+              <Button onClick={() => this.notHelpful(this.review.id)} data-id={this.id}>Not helpful</Button>
+            </Buttons>
+            <ReportLink>Report review</ReportLink>
+            </Links>
+          </div>
+        </Container>
+      );
+    } else {
+      return (
+        <Container>
+          <Stats review={this.review}></Stats>
+          <div className="helpful-form">
+            <span>{this.review.helpful_count <= 0 ? "Did you find this review helpful?" : <Helpful helpful_count={this.review.helpful_count}/>} </span>
+            <Links>
+            <Buttons>
+              <ButtonDisabled>Helpful</ButtonDisabled>
+              <ButtonDisabled>Not helpful</ButtonDisabled>
+            </Buttons>
+            <ReportLink>Report review</ReportLink>
+            </Links>
+          </div>
+        </Container>
+      );
+    }
+  }
 }
 
 export default Aside;

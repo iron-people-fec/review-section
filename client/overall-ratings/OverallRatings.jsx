@@ -1,6 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import Bar from './Bar.jsx';
+import PercentageCircle from './PercentageCircle.jsx';
+import Details from './Details.jsx';
 
 const Container = styled.div`
   text-align: center;
@@ -64,51 +66,63 @@ function OverallRatings({ reviews }) {
 
   const recommendation = function() {
     var number = reviews.filter(review => review.would_recommend === true);
-    var percentage = Math.round(((number.length / reviews.length) * 100) * 10) / 10;
+    var total = reviews.filter(review => review.would_recommend !== null);
+
+    if (total.length !== 0) {
+      var percentage = Math.ceil(((number.length / total.length) * 100));
+    } else {
+      var percentage = 0;
+    }
     return {number: number.length, percentage: percentage}
   }
 
-  const starBars = function () {
-    var hey = reviews.map(review => review.overall_rating)
-    // console.log(hey)
-    // for(review of reviews) {
-
-    // }
-  }()
+  const ratings = {five:0, four:0, three:0, two:0, one:0}
+  reviews.forEach(review => {
+    if (review.overall_rating === 100) ratings.five++;
+    if (review.overall_rating === 80) ratings.four++;
+    if (review.overall_rating === 60) ratings.three++;
+    if (review.overall_rating === 40) ratings.two++;
+    if (review.overall_rating === 20) ratings.one++;
+  });
+  for (let key in ratings) {
+    ratings[key] = Math.ceil((ratings[key]/reviews.length) * 100) * 2
+  }
 
   return (
     <Container>
       <h2>Guest Ratings & Reviews</h2>
       <Stats>
         <BarRatings>
-          <Bar stars={5} rating={50} />
-          <Bar stars={4} rating={50} />
-          <Bar stars={3} rating={2} />
-          <Bar stars={2} rating={5} />
-          <Bar stars={1} rating={100} />
+          <Bar stars={5} rating={ratings.five} />
+          <Bar stars={4} rating={ratings.four} />
+          <Bar stars={3} rating={ratings.three} />
+          <Bar stars={2} rating={ratings.two} />
+          <Bar stars={1} rating={ratings.one} />
         </BarRatings>
 
         <StarRatings>
           <LargeText>
-            {rating().starsNumber}
+            {(Math.round(rating().starsNumber * 10) / 10).toFixed(1)}
             </LargeText>
              <br></br>
           <Ratings>
-          <Stars style={{ width: rating().overallPercentage }}></Stars>
-            </Ratings>
+            <Stars style={{ width: rating().overallPercentage }}></Stars>
+          </Ratings>
             <br></br>
             {reviews.length} star ratings
         </StarRatings>
 
         <CircleRatings>
-          <img src="https://i.ibb.co/xmVTk3B/screen-shot-2021-01-22-at-2-52-09-PM.png" width="80px"></img>
+          <PercentageCircle num={recommendation().percentage}></PercentageCircle>
           <br></br>
           <strong>{recommendation().percentage}% would recommend</strong>
           <br></br>
         {recommendation().number} recommendations
         </CircleRatings>
       </Stats>
-      <img src="https://i.ibb.co/pPgyT3v/screen-shot-2021-01-20-at-12-43-09-AM.png" style={{ height: "110px"}}></img>
+      <Details reviews={reviews}></Details>
+
+
     </Container>
   )
 }
