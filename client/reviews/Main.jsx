@@ -10,7 +10,6 @@ const Ratings = styled.div `
   display: inline-block;
   background-repeat: no-repeat;
   background-size: 87px 16px;
-
 `
 const Stars = styled.div`
   width: 0%;
@@ -18,7 +17,6 @@ const Stars = styled.div`
   background-image: url("http://localhost:8004/images/stars_full.svg");
   background-repeat: no-repeat;
   background-size: 87px 16px;
-
 `
 
 const OuterContainer = styled.div`
@@ -64,7 +62,6 @@ overflow: hidden;
 
 
 const Main = ({ review }) => {
-
   return (
     <OuterContainer>
       <Title>{review.title}</Title>
@@ -82,7 +79,7 @@ const Main = ({ review }) => {
       </PostDetails>
       {review.body}
       <Gallery>
-        {review.images.map((url, i) => <Image src={url} key={i}/>)}
+        {review.images ? review.images.map((url, i) => <Image src={url} key={i}/>): ''}
       </Gallery>
     </OuterContainer>
   );

@@ -66,7 +66,6 @@ class Aside extends React.Component {
     this.review = this.props.review;
     this.helpful = this.props.helpful;
     this.notHelpful = this.props.notHelpful;
-    this.id = this.props.id
     this.state = {
       buttonsEnabled: true,
       helpful: { background: 'rgb(51, 51, 51)' },
@@ -88,8 +87,8 @@ class Aside extends React.Component {
             <span>{this.review.helpful_count <= 0 ? "Did you find this review helpful?" : <Helpful helpful_count={ this.review.helpful_count}/>} </span>
             <Links>
             <Buttons>
-              <Button className="disabledCursor" onClick={() => this.helpful(this.review.id)} data-id={this.id}>Helpful</Button>
-              <Button onClick={() => this.notHelpful(this.review.id)} data-id={this.id}>Not helpful</Button>
+              <Button className="disabledCursor" onClick={() => this.helpful(this.review.id)} data-id={this.review.id}>Helpful</Button>
+              <Button onClick={() => this.notHelpful(this.review.id)} data-id={this.review.id}>Not helpful</Button>
             </Buttons>
             <ReportLink>Report review</ReportLink>
             </Links>

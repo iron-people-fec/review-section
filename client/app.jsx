@@ -1,13 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import axios from 'axios';
-import Reviews from './reviews/Reviews.jsx';
 import Filters from './filters/Filters.jsx';
 import Gallery from './Gallery.jsx';
 import OverallRatings from './overall-ratings/OverallRatings.jsx';
 import styled from 'styled-components'
-import Modal from './Modal.jsx';
-
+import Review from './reviews/Review.jsx';
 
 const Container = styled.div`
   font-family: 'Helvetica Neue', Arial, sans-serif;
@@ -87,57 +85,70 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.reviewsWithImages = [];
+    this.images = [];
     this.state = {
       allReviews: [],
       selectedReviews: [],
-      displayedReviews: []
+      displayedReviews: [],
+      withPhotos: false,
+      verified: false
     }
+    this.getReviews = this.getReviews.bind(this)
+    this.getImages = this.getImages.bind(this)
   }
 
-  getReviews() {
-    axios.get('http://localhost:8004/products/5/reviews')
-    .then((response) => {
-      const responseReviews = response.data.slice()
-      for (let review of responseReviews) {
-        review.images = []
-      }
-
-      this.setState({
-        allReviews: responseReviews,
-        selectedReviews: responseReviews,
-        displayedReviews: responseReviews,
-      });
-    });
-  }
-
-  getImages(id) {
-    axios.get(`http://localhost:8004/products/${id}/images`)
-      .then((response) => {
-        const images = response.data;
-        if (images.length !== 0) {
-          const reviews = [...this.state.allReviews]
-          for (let review of reviews) {
-            if (review.id === id) {
-              review.images = images.map((img) => (img.url));
-              this.reviewsWithImages.push(review);
-            }
+  getReviews(cb) {
+    axios.get('http://localhost:8004/products/0/reviews')
+      .then((reviews) => {
+        const reviewList = reviews.data;
+        this.setState({
+          allReviews: reviewList,
+          displayedReviews: reviewList,
+          selectedReviews: reviewList
+        }, () => {
+          for (let i = 0; i < this.state.allReviews.length; i++) {
+            cb(reviewList[i].id, i)
           }
-          this.setState({
-            allReviews: reviews
-          });
+        });
+      })
+    }
+
+  getImages(id, i) {
+    axios.get(`http://localhost:8004/products/${id}/images`)
+      .then((images) => {
+        var imagesArray = [];
+        if (images.data.length > 0) {
+          for (var image of images.data) {
+            imagesArray.push(image.url);
+          }
         }
-    });
+        var newAllReviews = [...this.state.allReviews];
+        newAllReviews[i].images = imagesArray;
+
+        this.setState({
+          allReviews: newAllReviews,
+          displayedReviews: newAllReviews,
+          selectedReviews: newAllReviews
+        }, () => {
+            if (newAllReviews[i].images.length > 0) {
+              newAllReviews[i].images.forEach(image => {
+                this.images.push(image);
+                this.reviewsWithImages.push(newAllReviews[i])
+              })
+            }
+        })
+      })
   }
 
   helpful(id) {
     var i = event.target.getAttribute('data-id');
     var reviews = this.state.allReviews.slice();
     reviews[i].helpful_count++;
-    console.log(reviews);
 
     this.setState({
       allReviews: reviews,
-      displayedReviews: reviews
+      displayedReviews: reviews,
+      selectedReviews: reviews
     });
     axios.patch(`http://localhost:8004/products/${id}/helpful`);
   }
@@ -146,29 +157,80 @@ class App extends React.Component {
     var i = event.target.getAttribute('data-id');
     var reviews = this.state.allReviews.slice();
     reviews[i].helpful_count--;
-    console.log(reviews);
 
     this.setState({
       allReviews: reviews,
-      displayedReviews: reviews
+      displayedReviews: reviews,
+      selectedReviews: reviews
     });
     axios.patch(`http://localhost:8004/products/${id}/not_helpful`);
   }
 
+  filterByVerified() {
+    if (this.state.verified === false) {
+      const newDisplay = this.state.displayedReviews.filter(review => review.verified_purchaser === true);
+        this.setState({
+          verified: !this.state.verified,
+          displayedReviews: newDisplay
+        });
+      } else {
+        this.setState({
+          verified: !this.state.verified
+        }, ()=> {this.reapplyFilters()})
+      }
+  }
+
+  filterByPhotos() {
+    if (this.state.withPhotos === false) {
+      var newDisplay = this.state.displayedReviews.filter(review => review.images.length > 0);
+      this.setState({
+        withPhotos: !this.state.withPhotos,
+        displayedReviews: newDisplay
+      });
+    } else {
+      this.setState({
+        withPhotos: !this.state.withPhotos
+      }, ()=> {this.reapplyFilters()})
+
+
+    }
+  }
+
+  reapplyFilters() {
+    // console.log(this.state.withPhotos)
+    var reviews = this.state.allReviews;
+    if (this.state.withPhotos) {
+        reviews = reviews.filter(review => review.images.length > 0);
+    }
+    if (this.state.verified) {
+      reviews = reviews.filter(review => review.verified_purchaser === true);
+    }
+
+    this.setState({
+      displayedReviews: reviews,
+    }, ()=>{console.log(this.state.displayedReviews)});
+  }
+
+  setDisplay(reviews) {
+    this.setState({ displayedReviews: reviews });
+  }
+
+
 
   componentDidMount() {
-    this.getReviews();
+    this.getReviews(this.getImages);
   }
 
   render() {
+    var reviews = this.state.displayedReviews.map((review, i) => <Review key={i} review={review} helpful={this.helpful.bind(this)} notHelpful={this.notHelpful.bind(this)}></Review>)
     return (
-      <Container >
+      <Container>
         <OverallRatings reviews={this.state.allReviews}></OverallRatings>
-        <FoundMatches>
-        We found {this.state.allReviews.length} matching reviews
-      </FoundMatches>
+        <Gallery images={this.images} reviews={this.reviewsWithImages}></Gallery>
+        <Filters verified={this.state.verified} withPhotos={this.state.withPhotos} filterByVerified={this.filterByVerified.bind(this)} filterByPhotos={this.filterByPhotos.bind(this)} />
+        <FoundMatches>We found {this.state.allReviews.length} matching reviews</FoundMatches>
         <List>
-          <Reviews reviews={this.state.displayedReviews} getImages={this.getImages.bind(this)} helpful={this.helpful.bind(this)} notHelpful={this.notHelpful.bind(this)}/>
+         {reviews}
         </List>
       </Container>
     )

@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import Modal from './Modal.jsx';
+import Modal from './reviews/Modal.jsx';
 
   const ImagesContainer = styled.div`
     height: 125px;
@@ -54,24 +54,56 @@ class Gallery extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentReviewIndex: 0
-    }
+      currentReviewIndex: 0,
+      dislayModal: false
+    };
+    // this.changeIndex = this.changeIndex.bind(this);
   }
 
+  handleClickedImage() {
+    this.setState({
+      currentReviewIndex: event.target.getAttribute('data-id'),
+      dislayModal: true
+    });
+    document.body.style.overflow = 'hidden';
+  }
+
+  toggleModal() {
+    this.setState({
+      dislayModal: !this.state.dislayModal
+    });
+    document.body.style.overflow = 'unset';
+  }
+
+  changeIndex(forward) {
+    var max = this.props.reviews.length - 1;
+    if (forward) {
+      var i = this.state.currentReviewIndex;
+      i++
+      i = i > max ? 0 : i;
+    } else {
+      var i = this.state.currentReviewIndex;
+      i--
+      i = i === -1 ? max : i;
+    }
+    this.setState({
+      currentReviewIndex: i
+    });
+  }
 
   render() {
     var selectedImages = this.props.images.length > 7 ? this.props.images.slice(0, 6) : this.props.images;
-    // var handleClickedImage = function (i=0) {
+    const dislayModal = this.state.dislayModal;
 
-      // }
     return (
       <Container>
         <h3>Review Images</h3>
         <ImagesContainer>
-          {selectedImages.map((image, i) => <Image key={ i} src={image} handleClickedImage={() => handleClickedImage(i)}/>)}
+          {selectedImages.map((image, i) => <Image key={i} src={image} data-id={i} onClick={this.handleClickedImage.bind(this)}/>)}
+
           <MoreImages>See more review images</MoreImages>
         </ImagesContainer>
-        <Modal reviews={this.props.reviews}/>
+        {dislayModal ? <Modal closeModal={this.toggleModal.bind(this)} reviews={this.props.reviews} index={this.state.currentReviewIndex} images={this.props.images} changeIndex={this.changeIndex.bind(this)}/>: ''}
       </Container>
     )
   }
