@@ -8,9 +8,11 @@ import styled from 'styled-components'
 import Review from './reviews/Review.jsx';
 
 const Container = styled.div`
+  border-top: rgb(214, 214, 214) solid 1px;
+  padding-top: 3em;
   font-family: 'Helvetica Neue', Arial, sans-serif;
   font-size: 14px;
-  width: 1230px;
+  width: 97%;
   margin: 0 auto;
   color: #333333;
 `
@@ -98,7 +100,7 @@ class App extends React.Component {
   }
 
   getReviews(cb) {
-    axios.get('http://localhost:8004/products/0/reviews')
+    axios.get('http://localhost:8004/products/1/reviews')
       .then((reviews) => {
         const reviewList = reviews.data;
         this.setState({
@@ -124,7 +126,6 @@ class App extends React.Component {
         }
         var newAllReviews = [...this.state.allReviews];
         newAllReviews[i].images = imagesArray;
-
         this.setState({
           allReviews: newAllReviews,
           displayedReviews: newAllReviews,
@@ -191,8 +192,6 @@ class App extends React.Component {
       this.setState({
         withPhotos: !this.state.withPhotos
       }, ()=> {this.reapplyFilters()})
-
-
     }
   }
 
@@ -205,12 +204,10 @@ class App extends React.Component {
     if (this.state.verified) {
       reviews = reviews.filter(review => review.verified_purchaser === true);
     }
-
     this.setState({
       displayedReviews: reviews,
     }, ()=>{console.log(this.state.displayedReviews)});
   }
-
   setDisplay(reviews) {
     this.setState({ displayedReviews: reviews });
   }
@@ -222,7 +219,7 @@ class App extends React.Component {
   }
 
   render() {
-    var reviews = this.state.displayedReviews.map((review, i) => <Review key={i} review={review} helpful={this.helpful.bind(this)} notHelpful={this.notHelpful.bind(this)}></Review>)
+    var reviews = this.state.displayedReviews.map((review, i) => <Review key={i} review={review} id={i} helpful={this.helpful.bind(this)} notHelpful={this.notHelpful.bind(this)}></Review>)
     return (
       <Container>
         <OverallRatings reviews={this.state.allReviews}></OverallRatings>

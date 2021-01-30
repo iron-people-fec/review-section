@@ -27,7 +27,7 @@ class Review extends React.Component {
     return (
       <ReviewContainer>
         <Main review={this.props.review}/>
-        {/* <Aside review={this.review} helpful={this.props.helpful} notHelpful={this.props.notHelpful}/> */}
+        <Aside review={this.props.review} helpful={this.props.helpful} notHelpful={this.props.notHelpful} id={this.props.id}/>
 
       </ReviewContainer>
     )

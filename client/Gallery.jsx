@@ -49,6 +49,9 @@ import Modal from './reviews/Modal.jsx';
       outline-offset: 2px;
     }
   `
+  const Header = styled.h3`
+  font-size: 19px;
+`
 
 class Gallery extends React.Component {
   constructor(props) {
@@ -97,7 +100,7 @@ class Gallery extends React.Component {
 
     return (
       <Container>
-        <h3>Review Images</h3>
+        <Header>Review Images</Header>
         <ImagesContainer>
           {selectedImages.map((image, i) => <Image key={i} src={image} data-id={i} onClick={this.handleClickedImage.bind(this)}/>)}
 

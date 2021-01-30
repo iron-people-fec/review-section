@@ -33,11 +33,19 @@ app.get('/products/:review_id/images', (req, res) => {
 })
 
 app.patch('/products/:id/helpful', (req, res) => {
-  Review.update({ helpful_count: db.literal('helpful_count + 1') }, { where: { id: req.params.id } });
+  Review.update(
+    { helpful_count: db.literal('helpful_count + 1') },
+    { where: { id: req.params.id } }
+  ).then(() => { Review.findByPk(req.params.id).then(data => res.send(data)) });
+
 })
 
 app.patch('/products/:id/not_helpful', (req, res) => {
-  Review.update({ helpful_count: db.literal('helpful_count - 1') }, { where: { id: req.params.id } });
+  Review.update(
+    { helpful_count: db.literal('helpful_count - 1') },
+    { where: { id: req.params.id } }
+  ).then(() => { Review.findByPk(req.params.id).then(data => res.send(data)) });
+
 })
 
 db.sync().then(() => {
