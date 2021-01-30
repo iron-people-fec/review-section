@@ -1,6 +1,6 @@
-# Project Name
+# Bullseye (reviews module)
 
-> Project description
+This is the reviews module of a larger project that is meant to replicate a product page from Target's website.
 
 ## Related Projects
 
@@ -16,8 +16,9 @@
 
 ## Usage
 
+-manually create a mysql db called bullseye_reviews
 -npm run build
--npm start
+-npm start (this step also creates the schemas)
 -npm seed
 
 ## Requirements
