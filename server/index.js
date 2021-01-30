@@ -6,11 +6,10 @@ const db = require('../database')
 const Review = require('../database/models.js').Review
 const Photo = require('../database/models.js').Photo
 const cors = require('cors');
+const compression = require('compression');
 
-app.use(cors({
-  origin: 'http://localhost:8000'
-}));
-
+app.use(cors());
+app.use(compression())
 app.use(express.json());
 app.use(express.static(path.join(__dirname, '../public')));
 app.use('/bundle', express.static('public/dist/bundle.js'));
