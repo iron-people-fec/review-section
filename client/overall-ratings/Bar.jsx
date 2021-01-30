@@ -17,18 +17,21 @@ const PercentageBar = styled.span`
 `
 
 
-function Bar({stars, rating}) {
+function Bar({ stars, rating }) {
+
+  //fixes my NaN warning
+  rating = isNaN(rating) ? 0 : rating;
 
   return (
     <Container>
       {stars} stars
       <PercentageBar>
-      <svg width="200px" height="9">
+      <svg width="200" height="9">
         <rect x="0" y="0" width="200" height="8" fill="#F7F7F7" stroke="none" rx="4"></rect>
-        <rect x="0" y="0" width={2 * rating} height="8" fill="green" stroke="none" rx="4"></rect>
+        <rect x="0" y="0" width={String(rating)} height="8" fill="green" stroke="none" rx="4"></rect>
       </svg>
      </PercentageBar>
-       {rating}%
+       {rating/2}%
     </Container>
 
   )

@@ -1,19 +1,20 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import axios from 'axios';
-import Reviews from './review-list/Reviews.jsx';
 import Filters from './filters/Filters.jsx';
 import Gallery from './Gallery.jsx';
 import OverallRatings from './overall-ratings/OverallRatings.jsx';
 import styled from 'styled-components'
-import Modal from './Modal.jsx';
-
+import Review from './reviews/Review.jsx';
 
 const Container = styled.div`
+  border-top: rgb(214, 214, 214) solid 1px;
+  padding-top: 3em;
   font-family: 'Helvetica Neue', Arial, sans-serif;
-  font-size: 15px;
-  width: 1230px;
+  font-size: 14px;
+  width: 97%;
   margin: 0 auto;
+  color: #333333;
 `
 const List = styled.ul`
   padding-inline-start: 0;
@@ -63,178 +64,171 @@ transition: all 200ms ease-out 0s;
 }
 `
 
+const Words = styled.div`
+  position: absolute;
+  width: 100%;
+`
+const Circle = styled.div`
+  width:60px;
+`
+
+const PCircle = styled.svg`
+width: 100%;
+`
+
+const FoundMatches = styled.span`
+  display: inline-block;
+  padding: 0.3em 2em;
+  font-size: 16px;
+`
+
 
 class App extends React.Component {
   constructor(props) {
     super(props);
+    this.reviewsWithImages = [];
     this.images = [];
     this.state = {
       allReviews: [],
       selectedReviews: [],
       displayedReviews: [],
-      hiddenNum: 0,
-      checkBoxes: [
-        {id: 0, value: "with photos", isChecked: false},
-        {id: 1, value: "verified purchases", isChecked: false}
-      ],
-      allPhotos: []
+      withPhotos: false,
+      verified: false
     }
+    this.getReviews = this.getReviews.bind(this)
+    this.getImages = this.getImages.bind(this)
   }
 
-  handleGetReviews() {
+  getReviews(cb) {
     axios.get('http://localhost:8004/products/1/reviews')
-    .then((response) => {
-      const responseReviews = response.data.slice()
-      for (let review of responseReviews) {
-        review.images = []
-      }
-      // var numberOfHiddenReviews = responseReviews.length - 8;
-      // var someData = responseReviews.slice(0, 8)
-      this.setState({
-        allReviews: responseReviews,
-        selectedReviews: responseReviews,
-        displayedReviews: responseReviews,
-        hiddenNum: 0
-      });
-    });
-  }
-
-  addPhotos(id) {
-    axios.get(`http://localhost:8004/products/1/images`)
-      .then((response) => {
-        if (response.data.length !== 0) {
-          var reviewsEdited = [...this.state.allReviews]
-          for (var review of reviewsEdited) {
-            if (review.id === id) {
-              review.images = response.data.map((img) => (
-                img.url
-              ));
-              this.images.push(...review.images)
-            }
+      .then((reviews) => {
+        const reviewList = reviews.data;
+        this.setState({
+          allReviews: reviewList,
+          displayedReviews: reviewList,
+          selectedReviews: reviewList
+        }, () => {
+          for (let i = 0; i < this.state.allReviews.length; i++) {
+            cb(reviewList[i].id, i)
           }
+        });
+      })
+    }
 
-          this.setState({
-            allReviews: reviewsEdited
-          });
+  getImages(id, i) {
+    axios.get(`http://localhost:8004/products/${id}/images`)
+      .then((images) => {
+        var imagesArray = [];
+        if (images.data.length > 0) {
+          for (var image of images.data) {
+            imagesArray.push(image.url);
+          }
         }
-    });
+        var newAllReviews = [...this.state.allReviews];
+        newAllReviews[i].images = imagesArray;
+        this.setState({
+          allReviews: newAllReviews,
+          displayedReviews: newAllReviews,
+          selectedReviews: newAllReviews
+        }, () => {
+            if (newAllReviews[i].images.length > 0) {
+              newAllReviews[i].images.forEach(image => {
+                this.images.push(image);
+                this.reviewsWithImages.push(newAllReviews[i])
+              })
+            }
+        })
+      })
   }
 
+  helpful(id) {
+    var i = event.target.getAttribute('data-id');
+    var reviews = this.state.allReviews.slice();
+    reviews[i].helpful_count++;
 
-  handleCheckedBox() {
-    const newCheckboxes = [...this.state.checkBoxes]
-    var clickedObj;
-    for (var obj of newCheckboxes) {
-        if (obj.value === event.target.value) {
-          obj.isChecked = obj.isChecked ? false : true;
-          clickedObj = obj;
-          }
-    }
     this.setState({
-      checkBoxes: newCheckboxes,
+      allReviews: reviews,
+      displayedReviews: reviews,
+      selectedReviews: reviews
     });
+    axios.patch(`http://localhost:8004/products/${id}/helpful`);
+  }
 
-    if (clickedObj.value === "with photos") {
-      if (clickedObj.isChecked) {
-        this.handleCheckPhotoFilter()
+  notHelpful(id) {
+    var i = event.target.getAttribute('data-id');
+    var reviews = this.state.allReviews.slice();
+    reviews[i].helpful_count--;
+
+    this.setState({
+      allReviews: reviews,
+      displayedReviews: reviews,
+      selectedReviews: reviews
+    });
+    axios.patch(`http://localhost:8004/products/${id}/not_helpful`);
+  }
+
+  filterByVerified() {
+    if (this.state.verified === false) {
+      const newDisplay = this.state.displayedReviews.filter(review => review.verified_purchaser === true);
+        this.setState({
+          verified: !this.state.verified,
+          displayedReviews: newDisplay
+        });
       } else {
-        this.handleUncheckPhotoFilter()
+        this.setState({
+          verified: !this.state.verified
+        }, ()=> {this.reapplyFilters()})
       }
+  }
+
+  filterByPhotos() {
+    if (this.state.withPhotos === false) {
+      var newDisplay = this.state.displayedReviews.filter(review => review.images.length > 0);
+      this.setState({
+        withPhotos: !this.state.withPhotos,
+        displayedReviews: newDisplay
+      });
     } else {
-      if (clickedObj.isChecked) {
-        this.handleCheckVerifiedFilter()
-      } else {
-        this.handleUncheckVerifiedFilter()
-      }
+      this.setState({
+        withPhotos: !this.state.withPhotos
+      }, ()=> {this.reapplyFilters()})
     }
   }
 
-  handleCheckPhotoFilter() {
-    var selected = []
-    for (let review of this.state.allReviews) {
-      if (review.images.length > 0) {
-        selected.push(review);
-      }
+  reapplyFilters() {
+    // console.log(this.state.withPhotos)
+    var reviews = this.state.allReviews;
+    if (this.state.withPhotos) {
+        reviews = reviews.filter(review => review.images.length > 0);
+    }
+    if (this.state.verified) {
+      reviews = reviews.filter(review => review.verified_purchaser === true);
     }
     this.setState({
-      selectedReviews: selected
-    }, ()=>this.handleDisplayedReviews());
+      displayedReviews: reviews,
+    }, ()=>{console.log(this.state.displayedReviews)});
+  }
+  setDisplay(reviews) {
+    this.setState({ displayedReviews: reviews });
   }
 
-  handleUncheckVerifiedFilter() {
-    this.setState({
-      selectedReviews: this.state.allReviews
-    }, ()=>this.handleDisplayedReviews());
-  }
 
-  handleCheckVerifiedFilter() {
-    var selected = []
-    for (let review of this.state.allReviews) {
-      console.log(review.verified_purchaser);
-      if (review.verified_purchaser) {
-        selected.push(review);
-      }
-    }
-    this.setState({
-      selectedReviews: selected
-    }, ()=>this.handleDisplayedReviews());
-  }
-
-  handleUncheckPhotoFilter() {
-    this.setState({
-      selectedReviews: this.state.allReviews
-    }, ()=>this.handleDisplayedReviews());
-  }
-
-  handleDisplayedReviews() {
-    console.log(this.state.selectedReviews)
-    if (this.state.selectedReviews.length <= 8) {
-      var toDisplay = this.state.selectedReviews.slice();
-      var num = 0;
-    } else {
-      var toDisplay = this.state.selectedReviews.slice(0, 8);
-      var num = this.state.selectedReviews.length - 8
-    }
-
-    this.setState({
-      displayedReviews: toDisplay
-    });
-  }
-
-  handleLoadMore() {
-    if (this.state.hiddenNum < 8) {
-      var data = this.state.selectedReviews;
-      var display = 0;
-    } else {
-      var display = this.state.hiddenNum - 8;
-      var data = this.state.selectedReviews.slice(0, display);
-    }
-
-    this.setState({
-      hiddenNum: display,
-      displayedReviews: data
-    });
-  }
 
   componentDidMount() {
-    console.log(window.location.pathname.slice());
-    this.handleGetReviews();
+    this.getReviews(this.getImages);
   }
 
   render() {
+    var reviews = this.state.displayedReviews.map((review, i) => <Review key={i} review={review} id={i} helpful={this.helpful.bind(this)} notHelpful={this.notHelpful.bind(this)}></Review>)
     return (
-      <Container >
-        <OverallRatings reviews={this.state.displayedReviews}></OverallRatings>
-        <Gallery images={this.images} reviews={this.state.allReviews}></Gallery>
-        <ReviewButton>Write a review</ReviewButton>
-        <Filters checkBoxes={this.state.checkBoxes} handleCheckedBox={this.handleCheckedBox.bind(this)}/>
-        <span>We found {this.state.allReviews.length} matching reviews</span>
+      <Container>
+        <OverallRatings reviews={this.state.allReviews}></OverallRatings>
+        <Gallery images={this.images} reviews={this.reviewsWithImages}></Gallery>
+        <Filters verified={this.state.verified} withPhotos={this.state.withPhotos} filterByVerified={this.filterByVerified.bind(this)} filterByPhotos={this.filterByPhotos.bind(this)} />
+        <FoundMatches>We found {this.state.allReviews.length} matching reviews</FoundMatches>
         <List>
-          <Reviews reviews={this.state.displayedReviews} addPhotos={this.addPhotos.bind(this)} photosAdded={this.state.photosAdded}/>
+         {reviews}
         </List>
-        <Button onClick={this.handleLoadMore.bind(this)} style={{ display: this.state.hiddenNum <= 0 ? "none" : "block" }}>load {this.state.hiddenNum} more</Button>
-        <ReviewButton>Write a review</ReviewButton>
-        {/* <Modal/> */}
       </Container>
     )
   }

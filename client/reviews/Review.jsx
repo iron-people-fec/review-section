@@ -17,21 +17,19 @@ const ReviewContainer = styled.li`
 class Review extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      images: []
-    }
   }
 
   componentDidMount() {
-    this.props.addPhotos(this.props.review.id)
+
   }
 
   render() {
     return (
-      < ReviewContainer >
-        <Main review={this.props.review} photosAdded={this.props.photosAdded}/>
-      <Aside review={this.props.review} />
-    </ReviewContainer>
+      <ReviewContainer>
+        <Main review={this.props.review}/>
+        <Aside review={this.props.review} helpful={this.props.helpful} notHelpful={this.props.notHelpful} id={this.props.id}/>
+
+      </ReviewContainer>
     )
   }
 }
