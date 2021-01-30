@@ -151,6 +151,7 @@ class App extends React.Component {
       displayedReviews: reviews,
       selectedReviews: reviews
     });
+    
     axios.patch(`http://54.87.234.227:8004/products/${id}/helpful`);
   }
 
@@ -164,6 +165,7 @@ class App extends React.Component {
       displayedReviews: reviews,
       selectedReviews: reviews
     });
+    
     axios.patch(`http://54.87.234.227:8004/products/${id}/not_helpful`);
   }
 

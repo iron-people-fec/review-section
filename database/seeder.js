@@ -7,8 +7,6 @@ const titles = require('./fake_data/titles.js');
 const { uniqueNamesGenerator, adjectives, colors, animals, names } = require('unique-names-generator');
 const faker = require('faker');
 
-Review.destroy({ truncate: true, cascade: false });
-
 var username = function () {
   return uniqueNamesGenerator({
   dictionaries: [adjectives, animals], // colors can be omitted here as not used
