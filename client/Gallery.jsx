@@ -12,7 +12,7 @@ import Modal from './reviews/Modal.jsx';
   const Image = styled.img`
     width: 125px;
     height: 125px;
-    margin: 0 7px;
+    margin: 0 8px;
     overflow: hidden;
 
     &:hover {
@@ -38,6 +38,7 @@ import Modal from './reviews/Modal.jsx';
     box-sizing: border-box;
     font-size: 14px;
     padding: 12px;
+    margin-left: 8px;
 
     &:hover {
       cursor: pointer;
@@ -56,6 +57,8 @@ import Modal from './reviews/Modal.jsx';
 class Gallery extends React.Component {
   constructor(props) {
     super(props);
+    this.moreImages = false;
+    this.handleClickedImage = this.handleClickedImage.bind(this)
     this.state = {
       currentReviewIndex: 0,
       dislayModal: false
@@ -63,12 +66,20 @@ class Gallery extends React.Component {
     // this.changeIndex = this.changeIndex.bind(this);
   }
 
-  handleClickedImage() {
-    this.setState({
-      currentReviewIndex: event.target.getAttribute('data-id'),
-      dislayModal: true
-    });
-    document.body.style.overflow = 'hidden';
+  handleClickedImage(atBeginning) {
+    if (atBeginning === false) {
+      this.setState({
+        currentReviewIndex: event.target.getAttribute('data-id'),
+        dislayModal: true
+      });
+      document.body.style.overflow = 'hidden';
+    } else {
+      this.setState({
+        currentReviewIndex: 0,
+        dislayModal: true
+      });
+      document.body.style.overflow = 'hidden';
+    }
   }
 
   toggleModal() {
@@ -94,17 +105,28 @@ class Gallery extends React.Component {
     });
   }
 
-  render() {
-    var selectedImages = this.props.images.length > 7 ? this.props.images.slice(0, 6) : this.props.images;
-    const dislayModal = this.state.dislayModal;
+  // componentDidMount() {
+
+    render() {
+      var moreImages = false;
+      var selectedImages = []
+      if (this.props.images.length >= 7) {
+        selectedImages = this.props.images.slice(0, 6);
+        this.moreImages = true;
+      } else {
+        selectedImages = this.props.images;
+      }
+
+      const dislayModal = this.state.dislayModal;
+
 
     return (
       <Container>
-        <Header>Review Images</Header>
+        <Header>Review images</Header>
         <ImagesContainer>
-          {selectedImages.map((image, i) => <Image key={i} src={image} data-id={i} onClick={this.handleClickedImage.bind(this)}/>)}
+          {selectedImages.map((image, i) => <Image key={i} src={image} data-id={i} onClick={() => this.handleClickedImage(false)}/>)}
 
-          <MoreImages>See more review images</MoreImages>
+          {this.moreImages ? <MoreImages onClick={() => this.handleClickedImage(true)}>See more review images</MoreImages> : ''}
         </ImagesContainer>
         {dislayModal ? <Modal closeModal={this.toggleModal.bind(this)} reviews={this.props.reviews} index={this.state.currentReviewIndex} images={this.props.images} changeIndex={this.changeIndex.bind(this)}/>: ''}
       </Container>

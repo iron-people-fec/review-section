@@ -67,7 +67,7 @@ const Main = ({ review }) => {
       <Title>{review.title}</Title>
       <Container>
         <Ratings>
-          <Stars style={{ width: `${review.value_rating}%` }}></Stars>
+          <Stars style={{ width: `${review.overall_rating}%` }}></Stars>
         </Ratings>
         <Recommendation>
           <Recommend recommend={review.would_recommend}/>

@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import Checkbox from './Checkbox.jsx';
+import RatingDropDown from './RatingDropDown.jsx';
 
 const Container = styled.div`
   display: flex;
@@ -37,7 +38,7 @@ margin-left: 20px;
 `
 
 
-function Filters({ verified, withPhotos, filterByVerified, filterByPhotos}) {
+function Filters({ verified, withPhotos, filterByVerified, filterByPhotos, filterByStars, stars}) {
 
   return (
     <Container>
@@ -52,6 +53,7 @@ function Filters({ verified, withPhotos, filterByVerified, filterByPhotos}) {
           </svg>
           </Arrow>
         </Dropdown>
+        <RatingDropDown stars={stars} filterByStars={filterByStars}></RatingDropDown>
       </div>
       <Checkboxes>
         <Checkbox checkbox={'With photos'} filter={filterByPhotos} isChecked={withPhotos} />
