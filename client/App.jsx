@@ -101,7 +101,7 @@ class App extends React.Component {
   }
 
   getReviews(cb) {
-    axios.get('http://localhost:8004/products/3/reviews')
+    axios.get('http://localhost:8004/products/5/reviews')
       .then((reviews) => {
         const reviewList = reviews.data;
         this.setState({
@@ -265,7 +265,7 @@ class App extends React.Component {
     var reviews = this.state.displayedReviews.map((review, i) => <Review key={i} review={review} id={i} helpful={this.helpful.bind(this)} notHelpful={this.notHelpful.bind(this)}></Review>)
     return (
       <Container>
-        <OverallRatings reviews={this.state.allReviews}></OverallRatings>
+        <OverallRatings reviews={this.state.allReviews} filterByStars={this.filterByStars.bind(this)}></OverallRatings>
         <Gallery images={this.images} reviews={this.reviewsWithImages}></Gallery>
         <ReviewButton>Write a review</ReviewButton>
         <Filters verified={this.state.verified} withPhotos={this.state.withPhotos} filterByVerified={this.filterByVerified.bind(this)} filterByPhotos={this.filterByPhotos.bind(this)} filterByStars={this.filterByStars.bind(this)} stars={this.state.stars}/>

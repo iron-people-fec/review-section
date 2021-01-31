@@ -52,7 +52,7 @@ const CircleRatings = styled.div`
 
 `
 
-function OverallRatings({ reviews }) {
+function OverallRatings({ reviews, filterByStars }) {
 
   const rating = function () {
     var overallSum = reviews.reduce(function(sum, review){
@@ -93,11 +93,11 @@ function OverallRatings({ reviews }) {
       <h2>Guest Ratings & Reviews</h2>
       <Stats>
         <BarRatings>
-          <Bar stars={5} rating={ratings.five} />
-          <Bar stars={4} rating={ratings.four} />
-          <Bar stars={3} rating={ratings.three} />
-          <Bar stars={2} rating={ratings.two} />
-          <Bar stars={1} rating={ratings.one} />
+          <Bar stars={[5, 'five']} rating={ratings.five} filterByStars={filterByStars}/>
+          <Bar stars={[4, 'four']} rating={ratings.four} filterByStars={filterByStars}/>
+          <Bar stars={[3, 'three']} rating={ratings.three} filterByStars={filterByStars}/>
+          <Bar stars={[2, 'two']} rating={ratings.two} filterByStars={filterByStars}/>
+          <Bar stars={[1, 'one']} rating={ratings.one} filterByStars={filterByStars}/>
         </BarRatings>
 
         <StarRatings>

@@ -17,14 +17,14 @@ const PercentageBar = styled.span`
 `
 
 
-function Bar({ stars, rating }) {
+function Bar({ stars, rating, filterByStars }) {
 
   //fixes my NaN warning
   rating = isNaN(rating) ? 0 : rating;
 
   return (
-    <Container>
-      {stars} stars
+    <Container onClick={() => filterByStars(stars[1])}>
+      {stars[0]} stars
       <PercentageBar>
       <svg width="200" height="9">
         <rect x="0" y="0" width="200" height="8" fill="#F7F7F7" stroke="none" rx="4"></rect>

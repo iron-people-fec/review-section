@@ -63,7 +63,6 @@ class Gallery extends React.Component {
       currentReviewIndex: 0,
       dislayModal: false
     };
-    // this.changeIndex = this.changeIndex.bind(this);
   }
 
   handleClickedImage(atBeginning) {
