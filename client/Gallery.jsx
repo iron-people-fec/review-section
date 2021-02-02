@@ -127,7 +127,7 @@ class Gallery extends React.Component {
 
           {this.moreImages ? <MoreImages onClick={() => this.handleClickedImage(true)}>See more review images</MoreImages> : ''}
         </ImagesContainer>
-        {dislayModal ? <Modal closeModal={this.toggleModal.bind(this)} reviews={this.props.reviews} index={this.state.currentReviewIndex} images={this.props.images} changeIndex={this.changeIndex.bind(this)}/>: ''}
+        {dislayModal ? <Modal closeModal={this.toggleModal.bind(this)} reviews={this.props.reviews} index={this.state.currentReviewIndex} images={this.props.images} changeIndex={this.changeIndex.bind(this)} helpful={this.props.helpful} notHelpful={this.props.notHelpful}/>: ''}
       </Container>
     )
   }

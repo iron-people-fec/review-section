@@ -18,6 +18,7 @@ const Button = styled.button`
   background-color: white;
   color: #333333;
   margin: 0 2px;
+  transition: all 200ms ease-out 0s;
 
   &:hover {
     background-color: rgb(240, 240, 240);

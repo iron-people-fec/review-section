@@ -75,7 +75,7 @@ const getTrend = function () {
 
 var photo = function (i) {
   return {
-    url: faker.image.cats(),
+    url: faker.image.imageUrl(225, 180, 'animals', true, true),
     reviewId: i
   }
 }

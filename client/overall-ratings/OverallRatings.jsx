@@ -11,13 +11,17 @@ const Stats = styled.div`
   display: flex;
   justify-content: space-around;
   align-items: center;
-  width: 55%;
+  width: 50%;
   margin: 0 auto;
 `
 const BarRatings = styled.div`
 display: flex;
 flex-direction: column;
 font-size: 12px;
+`
+const Header = styled.h2`
+  font-size: 23px;
+  margin-bottom: 1.5em;
 `
 
 const StarRatings = styled.div`
@@ -90,7 +94,7 @@ function OverallRatings({ reviews, filterByStars }) {
 
   return (
     <Container>
-      <h2>Guest Ratings & Reviews</h2>
+      <Header>Guest Ratings & Reviews</Header>
       <Stats>
         <BarRatings>
           <Bar stars={[5, 'five']} rating={ratings.five} filterByStars={filterByStars}/>

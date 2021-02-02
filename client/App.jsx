@@ -88,13 +88,19 @@ class App extends React.Component {
     super(props);
     this.reviewsWithImages = [];
     this.images = [];
+    this.filterByPhotos = this.filterByPhotos.bind(this);
+    this.filterByStars = this.filterByStars.bind(this);
+    this.filterByVerified = this.filterByVerified.bind(this);
+    this.notHelpful = this.notHelpful.bind(this);
+    this.helpful = this.helpful.bind(this);
     this.state = {
       allReviews: [],
       selectedReviews: [],
       displayedReviews: [],
       withPhotos: false,
       verified: false,
-      stars: { five: false, four: false, three: false, two: false, one: false }
+      stars: { five: false, four: false, three: false, two: false, one: false },
+      sortBy: { mostRecent: false, highestRated: false, lowestRated: false, mostHelpful: false }
     }
     this.getReviews = this.getReviews.bind(this)
     this.getImages = this.getImages.bind(this)
@@ -114,7 +120,7 @@ class App extends React.Component {
           }
         });
       })
-    }
+  }
 
   getImages(id, i) {
     axios.get(`http://localhost:8004/products/${id}/images`)
@@ -132,13 +138,13 @@ class App extends React.Component {
           displayedReviews: newAllReviews,
           selectedReviews: newAllReviews
         }, () => {
-            if (newAllReviews[i].images.length > 0) {
-              newAllReviews[i].images.forEach(image => {
-                this.images.push(image);
-                this.reviewsWithImages.push(newAllReviews[i])
-              })
-            }
-          })
+          if (newAllReviews[i].images.length > 0) {
+            newAllReviews[i].images.forEach(image => {
+              this.images.push(image);
+              this.reviewsWithImages.push(newAllReviews[i])
+            })
+          }
+        })
       })
   }
 
@@ -173,29 +179,28 @@ class App extends React.Component {
   filterByVerified() {
     if (this.state.verified === false) {
       const newDisplay = this.state.displayedReviews.filter(review => review.verified_purchaser === true);
-        this.setState({
-          verified: !this.state.verified,
-          displayedReviews: newDisplay
-        });
-      } else {
-        this.setState({
-          verified: !this.state.verified
-        }, ()=> {this.reapplyFilters()})
-      }
+      this.setState({
+        verified: !this.state.verified,
+        displayedReviews: newDisplay
+      }, () => { this.sortBy() });
+    } else {
+      this.setState({
+        verified: !this.state.verified
+      }, () => { this.reapplyFilters() })
+    }
   }
 
   filterByPhotos() {
-    if (this.state.withPhotos === false) {
-      var newDisplay = this.state.displayedReviews.filter(review => review.images.length > 0);
-      this.setState({
-        withPhotos: !this.state.withPhotos,
-        displayedReviews: newDisplay
-      });
-    } else {
+    // if (this.state.withPhotos === false) {
+    //   var newDisplay = this.state.displayedReviews.filter(review => review.images.length > 0);
+    //   this.setState({
+    //     withPhotos: !this.state.withPhotos
+    //   }, () => { this.sortBy({ reviews:newDisplay }) });
+    // } else {
       this.setState({
         withPhotos: !this.state.withPhotos
-      }, ()=> {this.reapplyFilters()})
-    }
+      }, () => { this.reapplyFilters() })
+    // }
   }
 
 
@@ -203,23 +208,21 @@ class App extends React.Component {
     var allStars = this.state.stars;
     allStars[stars] = !this.state.stars[stars];
     if (allStars[stars] === true) {
-      var percentage= { five: 100, four: 80, three: 60, two: 40, one: 20 }
-      // console.log(percentage[stars])
+      var percentage = { five: 100, four: 80, three: 60, two: 40, one: 20 }
       var newDisplay = this.state.displayedReviews.filter((review) => (
         review.overall_rating === (percentage[stars])
       ));
-      // console.log(newDisplay)
 
-        this.setState({
-          stars: allStars,
-          // displayedReviews: newDisplay
-        }, ()=> {this.reapplyFilters()})
+      this.setState({
+        stars: allStars,
+      }, () => { this.reapplyFilters() })
     } else {
       this.setState({
         stars: allStars
-      }, ()=> {this.reapplyFilters()})
+      }, () => { this.reapplyFilters() })
     }
   }
+
 
   reapplyFilters() {
     var reviews = this.state.allReviews;
@@ -244,15 +247,58 @@ class App extends React.Component {
       }
     }
 
-    reviews = starReviews.length === 0? reviews: starReviews
+    reviews = starReviews.length === 0 ? reviews : starReviews
 
-    this.setState({
-      displayedReviews: reviews,
-    }, ()=>{console.log(this.state.displayedReviews)});
+    // this.sortBy({ reviews: reviews })
   }
 
-  setDisplay(reviews) {
-    this.setState({ displayedReviews: reviews });
+    setDisplay(reviews) {
+      this.setState({ displayedReviews: reviews });
+    }
+
+  sortBy({ type, reviews }) {
+    console.log('sorting')
+    var sortByStatus = { mostRecent: false, highestRated: false, lowestRated: false, mostHelpful: false }
+
+    if (reviews === undefined && type !== 'none' && type !== undefined) {
+      sortByStatus[type] = true
+      reviews = this.state.displayedReviews.slice()
+    } else if(type !== 'none' && type !== undefined){
+      for (key of this.state.sortBy) {
+        if (this.state.sortBy[key] === true) {
+          sortByStatus[key] = true;
+          type = key;
+        }
+      }
+    }
+
+    if (type === 'mostRecent') {
+      reviews = reviews.sort(function (x, y) {
+        return x.createdAt - y.createdAt;
+      })
+    } else if (type === 'highestRated') {
+      reviews = reviews.sort(function (x, y) {
+        return y.overall_rating - x.overall_rating;
+      })
+    } else if (type === 'lowestRated') {
+      reviews = reviews.sort(function (x, y) {
+        return x.overall_rating - y.overall_rating;
+      })
+    } else if (type === 'mostHelpful') {
+      reviews = reviews.sort(function (x, y) {
+        return y.helpful_count - x.helpful_count;
+      })
+    } else if (type === 'none') {
+      reviews = reviews.sort(function (x, y) {
+        return x.id - y.id;
+      })
+    }
+    console.log(reviews.map(rev => rev.helpful_count))
+    console.log(sortByStatus)
+
+    this.setState({
+      sortBy: sortByStatus,
+    }, () => this.setDisplay(reviews))
   }
 
 
@@ -262,16 +308,20 @@ class App extends React.Component {
   }
 
   render() {
-    var reviews = this.state.displayedReviews.map((review, i) => <Review key={i} review={review} id={i} helpful={this.helpful.bind(this)} notHelpful={this.notHelpful.bind(this)}></Review>)
+    var reviews = this.state.displayedReviews.map((review, i) => <Review key={i} review={review} id={i} helpful={this.helpful} notHelpful={this.notHelpful}></Review>)
     return (
       <Container>
-        <OverallRatings reviews={this.state.allReviews} filterByStars={this.filterByStars.bind(this)}></OverallRatings>
-        <Gallery images={this.images} reviews={this.reviewsWithImages}></Gallery>
+        <button onClick={() => this.sortBy({ type: 'mostHelpful' })}>mostHelpful</button>
+        <button onClick={() => this.sortBy({ type: 'lowestRated' })}>lowestRated</button>
+        <button onClick={() => this.sortBy({ type: 'none' })}>release</button>
+
+        <OverallRatings reviews={this.state.allReviews} filterByStars={this.filterByStars}></OverallRatings>
+        <Gallery images={this.images} reviews={this.reviewsWithImages} helpful={this.helpful} notHelpful={this.notHelpful}></Gallery>
         <ReviewButton>Write a review</ReviewButton>
-        <Filters verified={this.state.verified} withPhotos={this.state.withPhotos} filterByVerified={this.filterByVerified.bind(this)} filterByPhotos={this.filterByPhotos.bind(this)} filterByStars={this.filterByStars.bind(this)} stars={this.state.stars}/>
-        <FoundMatches>We found {this.state.allReviews.length} matching reviews</FoundMatches>
+        <Filters verified={this.state.verified} withPhotos={this.state.withPhotos} filterByVerified={this.filterByVerified} filterByPhotos={this.filterByPhotos} filterByStars={this.filterByStars} stars={this.state.stars} />
+        <FoundMatches>We found {this.state.displayedReviews.length} matching reviews</FoundMatches>
         <List>
-         {reviews}
+          {reviews}
         </List>
       </Container>
     )

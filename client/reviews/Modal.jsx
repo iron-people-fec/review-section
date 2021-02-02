@@ -1,7 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
 import Recommend from './small-components/Recommend.jsx';
+import Helpful from './small-components/Helpful.jsx';
 import moment from 'moment';
+import Stats from './small-components/Stats.jsx';
 
 const Popup = styled.div`
   position: fixed;
@@ -114,7 +116,7 @@ const Recommendation = styled.span`
   padding: 0 15px;
   margin: 0 10px;
 `
-const Ratings = styled.div `
+const Ratings = styled.div`
   background: url("http://localhost:8004/images/stars_empty.svg");
   width: 87px;
   height: 20px;
@@ -148,7 +150,53 @@ const GreenText = styled.span`
   color: rgb(0, 102, 1);
 `
 
-function Modal({ reviews, index, closeModal, images, changeIndex}) {
+const Buttons = styled.div`
+  margin-top: 1.2em;
+`
+const Button = styled.button`
+  display: inline-block;
+  width: 120px;
+  padding: 8px 0;
+  border:#888888 solid 1px;
+  border-radius: 4px;
+  font-size: 12px;
+  background-color: white;
+  color: #333333;
+  margin: 0 2px;
+
+  &:hover {
+    background-color: rgb(240, 240, 240);
+    border-color: black;
+    cursor: pointer;
+  }
+
+  &:focus {
+    outline: gray 1px dashed;
+    outline-offset: 2px;
+  }
+`
+
+const ReportLink = styled.div`
+  font-size: 16px;
+  text-decoration: underline;
+  cursor: pointer;
+`
+
+const Footer = styled.div`
+  font-size: 12px;
+  color: #666666;
+  display:flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-top: 0.8em;
+`
+
+const Body = styled.div`
+  margin-bottom: 1.5em;
+`
+
+
+function Modal({ reviews, index, closeModal, images, changeIndex, helpful, notHelpful }) {
 
   return (
     <Container>
@@ -168,18 +216,31 @@ function Modal({ reviews, index, closeModal, images, changeIndex}) {
           <Right>
             <Title>{reviews[index].title}</Title>
             <Wrapper>
-            <Ratings>
-              <Stars style={{ width: `${reviews[index].value_rating}%` }}></Stars>
-            </Ratings>
-            <Recommendation>
-              <Recommend recommend={reviews[index].would_recommend}/>
-           </Recommendation>
+              <Ratings>
+                <Stars style={{ width: `${reviews[index].value_rating}%` }}></Stars>
+              </Ratings>
+              <Recommendation>
+                <Recommend recommend={reviews[index].would_recommend} />
+              </Recommendation>
             </Wrapper>
             <PostDetails>
               {reviews[index].username} - {moment(reviews[index].createdAt).fromNow()}
               {reviews[index].verified_purchaser ? <span>, <GreenText> Verified purchaser</GreenText></span> : ''}
             </PostDetails>
-            <div>{reviews[index].body}</div>
+            <Body>{reviews[index].body}</Body>
+
+            <Stats review={reviews[index]}></Stats>
+
+            <Footer>
+              <div>
+                <span>{reviews[index].helpful_count <= 0 ? "Did you find this review helpful?" : <Helpful helpful_count={reviews[index].helpful_count} />} </span>
+                <Buttons>
+                  <Button className="disabledCursor" onClick={() => helpful(reviews[index].id)} data-id={reviews[index].id}>Helpful</Button>
+                  <Button onClick={() => notHelpful(reviews[index].id)} data-id={reviews[index].id}>Not helpful</Button>
+                </Buttons>
+              </div>
+              <ReportLink>Report review</ReportLink>
+            </Footer>
           </Right>
         </Review>
 
