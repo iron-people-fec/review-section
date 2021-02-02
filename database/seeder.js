@@ -3,6 +3,7 @@ const db = require('./index.js');
 const Review = require('../database/models.js').Review
 const Photo = require('../database/models.js').Photo
 const titles = require('./fake_data/titles.js');
+const images = require('./fake_data/images.js');
 
 const { uniqueNamesGenerator, adjectives, colors, animals, names } = require('unique-names-generator');
 const faker = require('faker');
@@ -15,23 +16,23 @@ var username = function () {
  });
 }
 
-const body = function () {
-  return faker.lorem.paragraphs()
-}
+// const body = function () {
+//   return faker.lorem.paragraphs()
+// }
 
 const percentage = function (trend) {
   generally = {
-    low: [20, 40, 40, 60],
-    mid: [40, 60, 60, 60, 80, 80, 80, 80, 80, 100],
-    high : [80, 100]
+    low: [20, 20, 40, 40, 40, 40, 60, 80, 100],
+    mid: [20, 40, 60, 60, 60, 80, 80, 80, 80, 80, 100, 100],
+    high : [40, 60, 80, 80, 100, 100]
   }
   let length = generally[trend].length
   return generally[trend][Math.floor(Math.random() * length)];
 }
 
 const helpCnt = function () {
-  var stars = [0, 0, 0, 0, 0, 1, 2];
-  return stars[Math.floor(Math.random() * 7)]
+  var stars = [0, 0, 0, 1, 2];
+  return stars[Math.floor(Math.random() * 5)]
 }
 
 const getOverall = function (quality, value) {
@@ -43,11 +44,20 @@ const getOverall = function (quality, value) {
 }
 
 const recommend = function (overall) {
-  var chance = Math.floor(Math.random() * 4);
+  var chance = Math.floor(Math.random() * 5);
   if (chance > 2) {
     return overall > 70 ? true : false;
   }
   return null;
+}
+
+const getBody = function () {
+  let x = Math.floor(Math.random() * 5) + 1
+  var body = '';
+  for (i = 0; i < x; i++) {
+    body += faker.commerce.productDescription() + ' ';
+  }
+  return body;
 }
 
 const review = function (i, trend) {
@@ -56,7 +66,7 @@ const review = function (i, trend) {
   let overall = getOverall(quality, value);
   return {
     title: titles(),
-    body: faker.commerce.productDescription().slice(0, 254),
+    body: getBody(),
     helpful_count: helpCnt(),
     username: faker.name.firstName(),
     product_id: i,
@@ -69,23 +79,24 @@ const review = function (i, trend) {
 }
 
 const getTrend = function () {
-  let trends = ['low', 'low', 'mid', 'mid', 'mid', 'high'];
+  let trends = ['low', 'mid', 'mid', 'mid', 'high', 'high'];
   return trends[Math.floor(Math.random() * 6)];
 }
 
 var photo = function (i) {
   return {
-    url: faker.image.cats(),
+    url: images(),
     reviewId: i
   }
 }
 
+
 reviewCnt = 0;
 
 for (let i = 0; i <= 5; i++) {
-  var max = Math.floor(Math.random() * 50) + 10
+  var maximum = Math.floor(Math.random() * 30) + 10
   let trend = getTrend()
-  for (let j = 0; j < max; j++) {
+  for (let j = 0; j < maximum; j++) {
     var currentReview = review(i, trend)
     Review.create(currentReview)
     reviewCnt++;

@@ -11,13 +11,17 @@ const Stats = styled.div`
   display: flex;
   justify-content: space-around;
   align-items: center;
-  width: 55%;
+  width: 50%;
   margin: 0 auto;
 `
 const BarRatings = styled.div`
 display: flex;
 flex-direction: column;
 font-size: 12px;
+`
+const Header = styled.h2`
+  font-size: 23px;
+  margin-bottom: 1.5em;
 `
 
 const StarRatings = styled.div`
@@ -32,27 +36,28 @@ const LargeText = styled.span`
 `
 
 const Ratings = styled.div `
+  margin-top: -5px;
   background: url("http://54.87.234.227:8004/images/stars_empty.svg");
-  width: 102px;
-  height: 20px;
+  width: 115px;
+  height: 35px;
   display: inline-block;
   background-repeat: no-repeat;
-  background-size: 102px 20px;
+  background-size: 115px 35px;
 
 `
 const Stars = styled.div`
-  width: 20%;
-  height: 20px;
+  width: 30%;
+  height: 35px;
   background-image: url("http://54.87.234.227:8004/images/stars_full.svg");
   background-repeat: no-repeat;
-  background-size: 102px 20px;
+  background-size: 115px 35px;
 
 `
 const CircleRatings = styled.div`
 
 `
 
-function OverallRatings({ reviews }) {
+function OverallRatings({ reviews, filterByStars }) {
 
   const rating = function () {
     var overallSum = reviews.reduce(function(sum, review){
@@ -90,14 +95,14 @@ function OverallRatings({ reviews }) {
 
   return (
     <Container>
-      <h2>Guest Ratings & Reviews</h2>
+      <Header>Guest Ratings & Reviews</Header>
       <Stats>
         <BarRatings>
-          <Bar stars={5} rating={ratings.five} />
-          <Bar stars={4} rating={ratings.four} />
-          <Bar stars={3} rating={ratings.three} />
-          <Bar stars={2} rating={ratings.two} />
-          <Bar stars={1} rating={ratings.one} />
+          <Bar stars={[5, 'five']} rating={ratings.five} filterByStars={filterByStars}/>
+          <Bar stars={[4, 'four']} rating={ratings.four} filterByStars={filterByStars}/>
+          <Bar stars={[3, 'three']} rating={ratings.three} filterByStars={filterByStars}/>
+          <Bar stars={[2, 'two']} rating={ratings.two} filterByStars={filterByStars}/>
+          <Bar stars={[1, 'one']} rating={ratings.one} filterByStars={filterByStars}/>
         </BarRatings>
 
         <StarRatings>

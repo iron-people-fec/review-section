@@ -8,7 +8,7 @@ var Review = db.define('Review', {
     allowNull: false
   },
   body: {
-    type: DataTypes.STRING,
+    type: DataTypes.TEXT,
     allowNull: false
   },
   helpful_count: {
@@ -49,7 +49,6 @@ var Review = db.define('Review', {
   },
 
 });
-// , { timestamps: false }
 
 var Photo = db.define('Photo', {
   url: {

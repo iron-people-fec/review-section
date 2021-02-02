@@ -88,19 +88,26 @@ class App extends React.Component {
     super(props);
     this.reviewsWithImages = [];
     this.images = [];
+    this.filterByPhotos = this.filterByPhotos.bind(this);
+    this.filterByStars = this.filterByStars.bind(this);
+    this.filterByVerified = this.filterByVerified.bind(this);
+    this.notHelpful = this.notHelpful.bind(this);
+    this.helpful = this.helpful.bind(this);
     this.state = {
       allReviews: [],
       selectedReviews: [],
       displayedReviews: [],
       withPhotos: false,
-      verified: false
+      verified: false,
+      stars: { five: false, four: false, three: false, two: false, one: false },
+      sortBy: { mostRecent: false, highestRated: false, lowestRated: false, mostHelpful: false }
     }
     this.getReviews = this.getReviews.bind(this)
     this.getImages = this.getImages.bind(this)
   }
 
   getReviews(cb) {
-    axios.get('http://54.87.234.227:8004/products/1/reviews')
+    axios.get('http://54.87.234.227:8004/products/0/reviews')
       .then((reviews) => {
         const reviewList = reviews.data;
         this.setState({
@@ -113,7 +120,7 @@ class App extends React.Component {
           }
         });
       })
-    }
+  }
 
   getImages(id, i) {
     axios.get(`http://54.87.234.227:8004/products/${id}/images`)
@@ -131,12 +138,12 @@ class App extends React.Component {
           displayedReviews: newAllReviews,
           selectedReviews: newAllReviews
         }, () => {
-            if (newAllReviews[i].images.length > 0) {
-              newAllReviews[i].images.forEach(image => {
-                this.images.push(image);
-                this.reviewsWithImages.push(newAllReviews[i])
-              })
-            }
+          if (newAllReviews[i].images.length > 0) {
+            newAllReviews[i].images.forEach(image => {
+              this.images.push(image);
+              this.reviewsWithImages.push(newAllReviews[i])
+            })
+          }
         })
       })
   }
@@ -172,20 +179,22 @@ class App extends React.Component {
   filterByVerified() {
     if (this.state.verified === false) {
       const newDisplay = this.state.displayedReviews.filter(review => review.verified_purchaser === true);
-        this.setState({
-          verified: !this.state.verified,
-          displayedReviews: newDisplay
-        });
-      } else {
-        this.setState({
-          verified: !this.state.verified
-        }, ()=> {this.reapplyFilters()})
-      }
+      this.setState({
+        verified: !this.state.verified,
+        displayedReviews: newDisplay
+      });
+    } else {
+      this.setState({
+        verified: !this.state.verified
+      }, () => { this.reapplyFilters() })
+    }
   }
 
   filterByPhotos() {
     if (this.state.withPhotos === false) {
-      var newDisplay = this.state.displayedReviews.filter(review => review.images.length > 0);
+      const newDisplay = this.state.displayedReviews.filter(review => {
+        if (review.images && review.images.length > 0) return review;
+      });
       this.setState({
         withPhotos: !this.state.withPhotos,
         displayedReviews: newDisplay
@@ -193,43 +202,75 @@ class App extends React.Component {
     } else {
       this.setState({
         withPhotos: !this.state.withPhotos
-      }, ()=> {this.reapplyFilters()})
+      }, () => { this.reapplyFilters() })
+    }
+  }
+
+
+  filterByStars(stars) {
+    var allStars = this.state.stars;
+    allStars[stars] = !this.state.stars[stars];
+    if (allStars[stars] === true) {
+      var percentage = { five: 100, four: 80, three: 60, two: 40, one: 20 }
+      var newDisplay = this.state.displayedReviews.filter((review) => (
+        review.overall_rating === (percentage[stars])
+      ));
+
+      this.setState({
+        stars: allStars,
+      }, () => { this.reapplyFilters() })
+    } else {
+      this.setState({
+        stars: allStars
+      }, () => { this.reapplyFilters() })
     }
   }
 
   reapplyFilters() {
-    // console.log(this.state.withPhotos)
     var reviews = this.state.allReviews;
+
     if (this.state.withPhotos) {
-        reviews = reviews.filter(review => review.images.length > 0);
+      reviews = reviews.filter(review => review.images.length > 0);
     }
     if (this.state.verified) {
       reviews = reviews.filter(review => review.verified_purchaser === true);
     }
-    this.setState({
-      displayedReviews: reviews,
-    }, ()=>{console.log(this.state.displayedReviews)});
-  }
-  setDisplay(reviews) {
+
+    var allStars = this.state.stars;
+    var percentage = { five: 100, four: 80, three: 60, two: 40, one: 20 }
+
+    var starReviews = [];
+    for (let key in allStars) {
+      if (allStars[key]) {
+        var currentRev = reviews.filter((review) => (
+          review.overall_rating === (percentage[key])
+        ));
+        starReviews.push(...currentRev);
+      }
+    }
+
+    reviews = starReviews.length === 0 ? reviews : starReviews
+
     this.setState({ displayedReviews: reviews });
   }
-
-
 
   componentDidMount() {
     this.getReviews(this.getImages);
   }
 
   render() {
-    var reviews = this.state.displayedReviews.map((review, i) => <Review key={i} review={review} id={i} helpful={this.helpful.bind(this)} notHelpful={this.notHelpful.bind(this)}></Review>)
+    var reviews = this.state.displayedReviews.map((review, i) => <Review key={i} review={review} id={i} helpful={this.helpful} notHelpful={this.notHelpful}></Review>)
     return (
       <Container>
-        <OverallRatings reviews={this.state.allReviews}></OverallRatings>
-        <Gallery images={this.images} reviews={this.reviewsWithImages}></Gallery>
-        <Filters verified={this.state.verified} withPhotos={this.state.withPhotos} filterByVerified={this.filterByVerified.bind(this)} filterByPhotos={this.filterByPhotos.bind(this)} />
-        <FoundMatches>We found {this.state.allReviews.length} matching reviews</FoundMatches>
+        <OverallRatings reviews={this.state.allReviews} filterByStars={this.filterByStars}></OverallRatings>
+        <Gallery images={this.images} reviews={this.reviewsWithImages} helpful={this.helpful} notHelpful={this.notHelpful}></Gallery>
+        <ReviewButton>Write a review</ReviewButton>
+
+        <Filters verified={this.state.verified} withPhotos={this.state.withPhotos} filterByVerified={this.filterByVerified} filterByPhotos={this.filterByPhotos} filterByStars={this.filterByStars} stars={this.state.stars} />
+
+        <FoundMatches>We found {this.state.displayedReviews.length} matching reviews</FoundMatches>
         <List>
-         {reviews}
+          {reviews}
         </List>
       </Container>
     )

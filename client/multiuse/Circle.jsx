@@ -1,5 +1,17 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled, {keyframes}  from 'styled-components';
+
+const progress = keyframes`
+  {
+    0% {
+      stroke-dasharray: 0 100;
+    }
+}
+`
+
+const Path = styled.path`
+  animation: ${progress} 0.7s linear ;
+`
 
 const Text = styled.text`
   font-weight: 400;
@@ -16,9 +28,9 @@ const Circle = ({ value }) => {
     return (
     <svg width="43" viewBox="0 0 36 36">
       <g>
-        <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#F7F7F7" strokeWidth="1.8" strokeDasharray="100, 100"/>
+        <Path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#F7F7F7" strokeWidth="1.8" strokeDasharray="100, 100"/>
 
-        <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="green" strokeWidth="1.8" strokeDasharray={percent} strokeLinecap="round"/>
+        <Path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="green" strokeWidth="1.8" strokeDasharray={percent} strokeLinecap="round"/>
 
         <Text textAnchor="middle" x="50%" y="63%" fill="green">{`${num}`}</Text>
       </g>
