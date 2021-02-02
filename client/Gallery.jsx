@@ -14,6 +14,7 @@ import Modal from './reviews/Modal.jsx';
     height: 125px;
     margin: 0 8px;
     overflow: hidden;
+    object-fit: cover;
 
     &:hover {
       cursor: pointer;

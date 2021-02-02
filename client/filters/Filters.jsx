@@ -65,8 +65,6 @@ const Carrot = styled.div`
 class Filters extends React.Component {
   constructor(props) {
     super(props);
-    this.verified = this.props.verified;
-    this.withPhotos = this.props.withPhotos;
     this.filterByVerified = this.props.filterByVerified;
     this.filterByPhotos = this.props.filterByPhotos;
     this.filterByStars = this.props.filterByStars;
@@ -128,8 +126,8 @@ class Filters extends React.Component {
         </Dropdowns>
 
         <Checkboxes>
-          <Checkbox checkbox={'With photos'} filter={this.filterByPhotos} isChecked={this.withPhotos} />
-          <Checkbox checkbox={'Verified purchases'} filter={this.filterByVerified} isChecked={this.verified} />
+          <Checkbox checkbox={'With photos'} filter={this.filterByPhotos} isChecked={this.props.withPhotos} />
+          <Checkbox checkbox={'Verified purchases'} filter={this.filterByVerified} isChecked={this.props.verified} />
         </Checkboxes>
       </Container>
     )
