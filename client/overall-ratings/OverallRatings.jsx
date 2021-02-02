@@ -36,20 +36,21 @@ const LargeText = styled.span`
 `
 
 const Ratings = styled.div `
+  margin-top: -5px;
   background: url("http://localhost:8004/images/stars_empty.svg");
-  width: 102px;
-  height: 20px;
+  width: 115px;
+  height: 35px;
   display: inline-block;
   background-repeat: no-repeat;
-  background-size: 102px 20px;
+  background-size: 115px 35px;
 
 `
 const Stars = styled.div`
-  width: 20%;
-  height: 20px;
+  width: 30%;
+  height: 35px;
   background-image: url("http://localhost:8004/images/stars_full.svg");
   background-repeat: no-repeat;
-  background-size: 102px 20px;
+  background-size: 115px 35px;
 
 `
 const CircleRatings = styled.div`

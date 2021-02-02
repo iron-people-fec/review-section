@@ -1,11 +1,27 @@
 import React from 'react';
-import styled from 'styled-components';
 import Recommend from './small-components/Recommend.jsx';
 import Helpful from './small-components/Helpful.jsx';
 import moment from 'moment';
 import Stats from './small-components/Stats.jsx';
+import styled, {keyframes}  from 'styled-components';
+
+const grow = keyframes`
+  {
+    0% {
+            transform: translate(-50%, -50%) scale(0.8);
+            -webkit-transform: translate(-50%, -50%) scale(0.8);
+            opacity:0.5;
+        }
+        100% {
+            transform: translate(-50%, -50%) scale(1.0);
+            -webkit-transform: translate(-50%, -50%) scale(1.0);
+        }
+}
+`
+
 
 const Popup = styled.div`
+  animation: ${grow} 0.3s ease-in ;
   position: fixed;
   background-color: white;
   width: 85%;
