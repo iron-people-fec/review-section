@@ -1,8 +1,8 @@
 const { DataTypes, Model } = require("sequelize");
-const db = require("./index.js");
+const sequel = require("./index.js");
 
 module.exports = {
-  Review: db.define("Review", {
+  Review: sequel.define("Review", {
     title: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -53,5 +53,3 @@ module.exports = {
     },
   }),
 };
-
-// Photo.belongsTo(Review, { as: "review" });

@@ -7,7 +7,8 @@ const Review = require("./database/models.js").Review;
 const Photo = require("./database/models.js").Photo;
 const cors = require("cors");
 const compression = require("compression");
-const seed = require("./database/seed");
+const { seed } = require("./database/seed");
+const Op = require("sequelize").Op;
 
 app.use(cors());
 app.use(compression());
@@ -24,12 +25,14 @@ app.get("/products/:product_id/reviews", (req, res) => {
   }).then((data) => res.send(data));
 });
 
-app.get("/products/:review_id/images", (req, res) => {
-  Photo.findAll({
-    where: {
-      reviewId: req.params.review_id,
-    },
-  }).then((data) => res.send(data));
+app.get("/products/:product_id/images", (req, res) => {
+  Review.findAll({
+    // where: { photos: { [Op.not]: "" } },
+    where: { photos: { [Op.not]: "" }, product_id: req.params.product_id },
+  }).then((data) => {
+    let photos = data.map((review) => review);
+    res.send(photos);
+  });
 });
 
 app.patch("/products/:id/helpful", (req, res) => {
@@ -51,8 +54,8 @@ app.patch("/products/:id/not_helpful", (req, res) => {
 });
 
 app.listen(port, async () => {
-  await db.sync({ force: true });
+  // await db.sync({ force: true });
+  // seed();
   console.log("connected to db");
-  seed();
-  console.log(`Now listening on port ${port}`);
+  console.log(`Now listening on http://localhost:${port}`);
 });

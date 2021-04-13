@@ -50,4 +50,4 @@ const seed = () => {
 
 // console.log(reviews);
 
-export default seed;
+module.exports = { seed };
