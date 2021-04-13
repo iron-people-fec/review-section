@@ -3,3 +3,5 @@ public/dist
 .env
 .DS_Store
 limbo.js
+
+public/.DS_Store
